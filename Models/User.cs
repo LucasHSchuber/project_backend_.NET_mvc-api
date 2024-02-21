@@ -13,8 +13,11 @@ namespace project_webbservice.Models
         [Key]
         public int UserId { get; set; }
         public string? Username { get; set; }
+        public string? Name { get; set; }
         public string? Email { get; set; }
         public string? PasswordHash { get; set; }
+        public string? Token { get; set; }
+
         public string? UserInfo { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
 

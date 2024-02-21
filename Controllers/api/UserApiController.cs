@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
+using BCrypt.Net;
+using System.Security.Cryptography;
+
+
 
 namespace projekt_webbservice.Controllers.api
 {
@@ -42,6 +46,10 @@ namespace projekt_webbservice.Controllers.api
             return user;
         }
 
+
+
+
+
         // PUT: api/UserApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,16 +81,117 @@ namespace projekt_webbservice.Controllers.api
             return NoContent();
         }
 
+
+
+
+
         // POST: api/UserApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser([FromBody] User user)
         {
+
+            //check is email exists when creating user
+            var emailExists = await _context.User
+                 .AnyAsync(u => u.Email == user.Email);
+
+            if (emailExists)
+            {
+                return Conflict("Email already exists");
+
+            }
+            //check is username exists when creating user
+            var usernameExists = await _context.User
+                 .AnyAsync(u => u.Username == user.Username);
+
+            if (usernameExists)
+            {
+                return Conflict("Username already exists");
+
+            }
+            //check if passwords matches
+            string rpassword = HttpContext.Request.Query["rpassword"];
+            if (rpassword != user.PasswordHash)
+            {
+                return Conflict("Passwords doesnt match");
+            }
+
+
+            // Hash the password using bcrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = hashedPassword;
+
+            user.Created = DateTime.Now;
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
+
+
+
+        // POST: api/UserApi/login
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> LoginUser([FromBody] User user)
+        {
+
+
+            // Validate input
+            if (string.IsNullOrEmpty(user.PasswordHash) || string.IsNullOrEmpty(user.Email) || user == null)
+            {
+                return BadRequest("Invalid input");
+            }
+
+            try
+            {
+                string? hashedPassword = null;
+
+                var userWithEmail = await _context.User
+                    .FirstOrDefaultAsync(u => u.Email == user.Email);
+
+                if (userWithEmail != null)
+                {
+                    hashedPassword = userWithEmail.PasswordHash;
+
+                    if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, hashedPassword))
+                    {
+                        // Generate a random token
+                        byte[] randomBytes = new byte[32]; // 256 bits
+                        using (var rng = RandomNumberGenerator.Create())
+                        {
+                            rng.GetBytes(randomBytes);
+                        }
+                        string token = Convert.ToBase64String(randomBytes);
+
+                        userWithEmail.Token = token;
+                        await _context.SaveChangesAsync();
+
+                        return Ok(token);
+                    }
+                    else
+                    {
+                        return Unauthorized("Incorrect password");
+                    }
+                }
+                else
+                {
+                    return NotFound("Email not found");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            }
+
+            // user.Created = DateTime.Now;
+            // _context.User.Add(user);
+            // await _context.SaveChangesAsync();
+
+            // return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+        }
+
+
 
         // DELETE: api/UserApi/5
         [HttpDelete("{id}")]
@@ -105,4 +214,9 @@ namespace projekt_webbservice.Controllers.api
             return _context.User.Any(e => e.UserId == id);
         }
     }
+
+
 }
+
+
+

@@ -62,7 +62,7 @@ namespace projekt_webbservice.Controllers.mvc
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AudioID,Title,Description,Duration,ImageFile,Created,CategoryID,AudioData")] Audio audio)
+        public async Task<IActionResult> Create([Bind("AudioID,Title,Description,Duration,ImageFile,AudioFile,Created,CategoryID,AudioData")] Audio audio)
         {
             if (ModelState.IsValid)
             {
@@ -89,6 +89,32 @@ namespace projekt_webbservice.Controllers.mvc
                 {
                     audio.ImageName = "empty.jpg";
                 }
+
+
+
+                if (audio.AudioFile != null)
+                {
+                    // Handle audio file upload
+
+                    string audioFileName = Path.GetFileNameWithoutExtension(audio.AudioFile.FileName);
+                    string audioExtension = Path.GetExtension(audio.AudioFile.FileName);
+                    string uniqueAudioFileName = audioFileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + audioExtension;
+                    string audioPath = Path.Combine(wwwRootPath + "/audioupload", uniqueAudioFileName);
+                    audio.FilePath = uniqueAudioFileName;
+
+                    using (var fileStream = new FileStream(audioPath, FileMode.Create))
+                    {
+                        await audio.AudioFile.CopyToAsync(fileStream);
+                    }
+
+                }
+                else
+                {
+                    audio.FilePath = "empty.jpg";
+                }
+
+
+
 
                 audio.Created = DateTime.Now;
 
