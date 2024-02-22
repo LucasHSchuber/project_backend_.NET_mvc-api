@@ -36,7 +36,11 @@ namespace projekt_webbservice.Controllers.api
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.User.FindAsync(id);
+
+            var user = await _context.User
+                  .Include(u => u.Avatar)
+                  .FirstOrDefaultAsync(u => u.UserId == id);
+
 
             if (user == null)
             {
@@ -129,6 +133,27 @@ namespace projekt_webbservice.Controllers.api
         }
 
 
+        // POST: api/UserApi/checkEmail
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("checkEmail")]
+        public async Task<ActionResult<User>> CheckEmail()
+        {
+            string email = HttpContext.Request.Query["email"];
+            //check is email exists
+            var emailExists = await _context.User
+                 .AnyAsync(u => u.Email == email);
+
+            if (emailExists)
+            {
+                return Ok(new { email, exists = true });
+
+            }
+            else
+            {
+                return Ok(new { email, exists = false });
+            }
+        }
+
 
         // POST: api/UserApi/login
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -163,11 +188,11 @@ namespace projekt_webbservice.Controllers.api
                             rng.GetBytes(randomBytes);
                         }
                         string token = Convert.ToBase64String(randomBytes);
-
                         userWithEmail.Token = token;
                         await _context.SaveChangesAsync();
 
-                        return Ok(token);
+                        return Ok(new { Token = token, UserId = userWithEmail.UserId, userWithEmail.AvatarId, userWithEmail.ImageName });
+
                     }
                     else
                     {
@@ -190,6 +215,81 @@ namespace projekt_webbservice.Controllers.api
 
             // return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
+
+
+
+
+        // POST: api/UserApi/avatar
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("avatar")]
+        public async Task<ActionResult<User>> Avatar()
+        {
+            try
+            {
+                if (!int.TryParse(HttpContext.Request.Query["avatar"], out int avatar))
+                {
+                    return BadRequest("Invalid avatar value");
+                }
+
+                if (!int.TryParse(HttpContext.Request.Query["userid"], out int userid))
+                {
+                    return BadRequest("Invalid userid value");
+                }
+
+                // Find the user
+                var user = await _context.User.FindAsync(userid);
+
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                if (avatar == 1111)
+                {
+                    user.AvatarId = 1111;
+                }
+                else
+                {
+                    user.AvatarId = avatar;
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(user);
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            }
+        }
+
+
+        // POST: api/UserApi/defaultavatar/{id}
+        [HttpPost("defaultavatar/{id}")]
+        public async Task<ActionResult<User>> SetDefaultAvatar(int id)
+        {
+            try
+            {
+                var user = await _context.User.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+                user.AvatarId = 3;
+                await _context.SaveChangesAsync();
+                return Ok(user);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            }
+        }
+
+
+
+
+
+
 
 
 

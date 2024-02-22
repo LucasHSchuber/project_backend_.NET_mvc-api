@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<UserList> UserList { get; set; } // Represents the UserList entity
     public DbSet<UserListAudio> UserListAudio { get; set; } // Represents the UserListAudio entity
     public DbSet<Like> Like { get; set; } // Represents the Like entity
+    public DbSet<Avatar> Avatar { get; set; } // Represents the Avatar entity
 
-public DbSet<ApplicationUser> ApplicationUser { get; set; } = default!;
+    public DbSet<ApplicationUser> ApplicationUser { get; set; } = default!;
 }

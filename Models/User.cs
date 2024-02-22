@@ -26,7 +26,12 @@ namespace project_webbservice.Models
         [NotMapped]
         // [Display(Name = "Bild")]
         public IFormFile? ImageFile { get; set; }
-        // public int avatar { get; set; }
+
+        public int? AvatarId { get; set; }
+
+        [ForeignKey("AvatarId")]
+        public Avatar? Avatar { get; set; }
+
 
         // Navigation property
         public ICollection<UserList>? Lists { get; set; }

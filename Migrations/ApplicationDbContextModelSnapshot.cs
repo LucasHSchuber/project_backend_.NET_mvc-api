@@ -259,6 +259,20 @@ namespace projekt_webbservice.Migrations
                     b.ToTable("Audio");
                 });
 
+            modelBuilder.Entity("project_webbservice.Models.Avatar", b =>
+                {
+                    b.Property<int>("AvatarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AvatarImageName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AvatarId");
+
+                    b.ToTable("Avatar");
+                });
+
             modelBuilder.Entity("project_webbservice.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -303,6 +317,9 @@ namespace projekt_webbservice.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AvatarId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
@@ -328,6 +345,8 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("AvatarId");
 
                     b.ToTable("User");
                 });
@@ -470,6 +489,15 @@ namespace projekt_webbservice.Migrations
                     b.Navigation("Audio");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("project_webbservice.Models.User", b =>
+                {
+                    b.HasOne("project_webbservice.Models.Avatar", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("project_webbservice.Models.UserList", b =>
