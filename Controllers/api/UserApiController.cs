@@ -39,7 +39,7 @@ namespace projekt_webbservice.Controllers.api
 
             var user = await _context.User
                   .Include(u => u.Avatar)
-                  .FirstOrDefaultAsync(u => u.UserId == id);
+                  .FirstOrDefaultAsync(a => a.UserId == id);
 
 
             if (user == null)
@@ -48,6 +48,23 @@ namespace projekt_webbservice.Controllers.api
             }
 
             return user;
+        }
+
+        // GET: api/UserApi/mylist/5
+        [HttpGet("{id}/audios")]
+        public async Task<ActionResult<IEnumerable<Audio>>> GetUserAudios(int id)
+        {
+
+            var user = await _context.User
+        .Include(u => u.Audios) // Include the audios associated with the user
+        .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user.Audios.ToList();
         }
 
 
@@ -275,7 +292,7 @@ namespace projekt_webbservice.Controllers.api
                 {
                     return NotFound("User not found");
                 }
-                user.AvatarId = 3;
+                user.AvatarId = 1;
                 await _context.SaveChangesAsync();
                 return Ok(user);
             }

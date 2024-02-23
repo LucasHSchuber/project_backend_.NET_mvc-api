@@ -17,6 +17,21 @@ namespace projekt_webbservice.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
+            modelBuilder.Entity("AudioUser", b =>
+                {
+                    b.Property<int>("AudiosAudioID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UsersUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AudiosAudioID", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
+
+                    b.ToTable("AudioUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -351,47 +366,25 @@ namespace projekt_webbservice.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("project_webbservice.Models.UserList", b =>
+            modelBuilder.Entity("project_webbservice.Models.UserAudio", b =>
                 {
-                    b.Property<int>("ListID")
+                    b.Property<int>("UserAudioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ListName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserID")
+                    b.Property<int>("AudioId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ListID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("UserList");
-                });
-
-            modelBuilder.Entity("project_webbservice.Models.UserListAudio", b =>
-                {
-                    b.Property<int>("UserListAudioID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AudioID")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("UserAudioId");
 
-                    b.Property<int>("ListID")
-                        .HasColumnType("INTEGER");
+                    b.HasIndex("AudioId");
 
-                    b.Property<int?>("UserListListID")
-                        .HasColumnType("INTEGER");
+                    b.HasIndex("UserId");
 
-                    b.HasKey("UserListAudioID");
-
-                    b.HasIndex("AudioID");
-
-                    b.HasIndex("UserListListID");
-
-                    b.ToTable("UserListAudio");
+                    b.ToTable("UserAudio");
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>
@@ -408,6 +401,21 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("AudioUser", b =>
+                {
+                    b.HasOne("project_webbservice.Models.Audio", null)
+                        .WithMany()
+                        .HasForeignKey("AudiosAudioID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("project_webbservice.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -500,39 +508,28 @@ namespace projekt_webbservice.Migrations
                     b.Navigation("Avatar");
                 });
 
-            modelBuilder.Entity("project_webbservice.Models.UserList", b =>
-                {
-                    b.HasOne("project_webbservice.Models.User", "User")
-                        .WithMany("Lists")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("project_webbservice.Models.UserListAudio", b =>
+            modelBuilder.Entity("project_webbservice.Models.UserAudio", b =>
                 {
                     b.HasOne("project_webbservice.Models.Audio", "Audio")
-                        .WithMany("UserListAudios")
-                        .HasForeignKey("AudioID")
+                        .WithMany()
+                        .HasForeignKey("AudioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("project_webbservice.Models.UserList", "UserList")
-                        .WithMany("UserListAudios")
-                        .HasForeignKey("UserListListID");
+                    b.HasOne("project_webbservice.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Audio");
 
-                    b.Navigation("UserList");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("project_webbservice.Models.Audio", b =>
                 {
                     b.Navigation("Likes");
-
-                    b.Navigation("UserListAudios");
                 });
 
             modelBuilder.Entity("project_webbservice.Models.Category", b =>
@@ -543,13 +540,6 @@ namespace projekt_webbservice.Migrations
             modelBuilder.Entity("project_webbservice.Models.User", b =>
                 {
                     b.Navigation("Likes");
-
-                    b.Navigation("Lists");
-                });
-
-            modelBuilder.Entity("project_webbservice.Models.UserList", b =>
-                {
-                    b.Navigation("UserListAudios");
                 });
 #pragma warning restore 612, 618
         }

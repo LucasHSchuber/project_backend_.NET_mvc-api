@@ -34,7 +34,7 @@ namespace project_webbservice.Models
 
 
         // Navigation property
-        public ICollection<UserList>? Lists { get; set; }
+        public ICollection<Audio>? Audios { get; set; } 
         public ICollection<Like>? Likes { get; set; }
 
 

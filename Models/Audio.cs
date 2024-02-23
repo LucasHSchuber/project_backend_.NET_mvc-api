@@ -33,7 +33,7 @@ namespace project_webbservice.Models
 
 
         public Category? Category { get; set; }
-        public ICollection<UserListAudio>? UserListAudios { get; set; }
+        public ICollection<User>? Users { get; set; } // Changed from UserListAudios to Users
         public ICollection<Like>? Likes { get; set; }
 
     }
