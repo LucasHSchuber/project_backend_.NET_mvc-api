@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
+using projekt_webbservice.DTOs;
 
 namespace projekt_webbservice.Controllers.api
 {
@@ -23,9 +24,24 @@ namespace projekt_webbservice.Controllers.api
 
         // GET: api/AudioApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Audio>>> GetAudio()
+        public async Task<ActionResult<IEnumerable<AudioDto>>> GetAudio()
         {
-            return await _context.Audio.ToListAsync();
+            var audioDtos = await _context.Audio
+                .Include(a => a.Category) // Include the Category navigation property
+                .Select(a => new AudioDto
+                {
+                    AudioID = a.AudioID,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Duration = a.Duration,
+                    Created = a.Created,
+                    ImageName = a.ImageName,
+                    FilePath = a.FilePath,
+                    CategoryName = a.Category.Name // Include the Category name
+                })
+            .ToListAsync();
+
+            return audioDtos;
         }
 
         // GET: api/AudioApi/5
@@ -41,6 +57,54 @@ namespace projekt_webbservice.Controllers.api
 
             return audio;
         }
+
+        // GET: api/UserApi/mylist/5
+        [HttpGet("{id}/mylist")]
+        public async Task<ActionResult<IEnumerable<AudioDto>>> GetAudiosByUserId(int id)
+        {
+            var userAudios = await _context.UserAudio
+                .Where(ua => ua.UserId == id)
+                .Select(ua => ua.AudioId)
+                .ToListAsync();
+
+            var audioDtos = await _context.Audio
+                .Include(a => a.Category) // Include the Category navigation property
+                .Where(a => userAudios.Contains(a.AudioID)) // Filter audios based on user's list
+                .Select(a => new AudioDto
+                {
+                    AudioID = a.AudioID,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Duration = a.Duration,
+                    Created = a.Created,
+                    ImageName = a.ImageName,
+                    FilePath = a.FilePath,
+                    CategoryName = a.Category.Name // Include the Category name
+                })
+                .ToListAsync();
+
+            return audioDtos;
+        }
+
+        // GET: api/Audio
+        [HttpGet("{id}/list")]
+        public async Task<ActionResult<IEnumerable<Audio>>> GetAudios(int id)
+        {
+            // var userAudios = await _context.UserAudio
+            //     .Where(ua => ua.UserId == id)
+            //     .Select(ua => ua.AudioId)
+            //     .ToListAsync();
+
+            var audios = await _context.Audio
+                .Include(a => a.Category) // Include the Category navigation property
+                                          // .Where(a => userAudios.Contains(a.AudioID)) // Filter audios based on user's list
+                .ToListAsync();
+
+            return audios;
+        }
+
+
+
 
         // PUT: api/AudioApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

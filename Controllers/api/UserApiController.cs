@@ -50,14 +50,14 @@ namespace projekt_webbservice.Controllers.api
             return user;
         }
 
-        // GET: api/UserApi/mylist/5
+        // GET: api/UserApi/audios/5
         [HttpGet("{id}/audios")]
         public async Task<ActionResult<IEnumerable<Audio>>> GetUserAudios(int id)
         {
 
             var user = await _context.User
-        .Include(u => u.Audios) // Include the audios associated with the user
-        .FirstOrDefaultAsync(u => u.UserId == id);
+                .Include(u => u.Audios) // Include the audios associated with the user
+                .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
             {
@@ -65,6 +65,23 @@ namespace projekt_webbservice.Controllers.api
             }
 
             return user.Audios.ToList();
+        }
+
+
+        // GET: api/UserApi/mylist/5
+        [HttpGet("test")]
+        public async Task<ActionResult<List<Audio>>> GetUserAudio(int id)
+        {
+            var userAudios = await _context.Audio
+            .Include(a => a.Category) // Include the Category navigation property
+            .ToListAsync();
+
+            if (userAudios == null)
+            {
+                return NotFound();
+            }
+
+            return userAudios;
         }
 
 

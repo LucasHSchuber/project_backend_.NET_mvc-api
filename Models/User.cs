@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+
 
 namespace project_webbservice.Models
 {
@@ -34,7 +36,7 @@ namespace project_webbservice.Models
 
 
         // Navigation property
-        public ICollection<Audio>? Audios { get; set; } 
+        public ICollection<Audio>? Audios { get; set; }
         public ICollection<Like>? Likes { get; set; }
 
 

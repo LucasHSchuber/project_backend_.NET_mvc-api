@@ -267,6 +267,9 @@ namespace projekt_webbservice.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("AudioID");
 
                     b.HasIndex("CategoryID");
@@ -472,7 +475,7 @@ namespace projekt_webbservice.Migrations
             modelBuilder.Entity("project_webbservice.Models.Audio", b =>
                 {
                     b.HasOne("project_webbservice.Models.Category", "Category")
-                        .WithMany("Auidos")
+                        .WithMany("Audios")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -511,7 +514,7 @@ namespace projekt_webbservice.Migrations
             modelBuilder.Entity("project_webbservice.Models.UserAudio", b =>
                 {
                     b.HasOne("project_webbservice.Models.Audio", "Audio")
-                        .WithMany()
+                        .WithMany("UserAudios")
                         .HasForeignKey("AudioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -530,11 +533,13 @@ namespace projekt_webbservice.Migrations
             modelBuilder.Entity("project_webbservice.Models.Audio", b =>
                 {
                     b.Navigation("Likes");
+
+                    b.Navigation("UserAudios");
                 });
 
             modelBuilder.Entity("project_webbservice.Models.Category", b =>
                 {
-                    b.Navigation("Auidos");
+                    b.Navigation("Audios");
                 });
 
             modelBuilder.Entity("project_webbservice.Models.User", b =>

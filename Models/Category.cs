@@ -13,7 +13,7 @@ namespace project_webbservice.Models
         public string? Name { get; set; }
 
         // Navigation property
-        public ICollection<Audio>? Auidos { get; set; }
+        public ICollection<Audio>? Audios { get; set; }
     }
 
 

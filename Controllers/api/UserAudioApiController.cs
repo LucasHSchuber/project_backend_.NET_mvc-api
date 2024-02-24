@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
+using System.Linq;
 
 namespace projekt_webbservice.Controllers.api
 {
@@ -32,17 +33,16 @@ namespace projekt_webbservice.Controllers.api
         [HttpGet("{id}")]
         public async Task<ActionResult<List<UserAudio>>> GetUserAudio(int id)
         {
-            var userAudio = await _context.UserAudio
-            .Include(ua => ua.Audio)
-                .Where(l => l.UserId == id)
-                .ToListAsync();
+            var userAudios = await _context.UserAudio
+            .Where(ua => ua.UserId == id)
+            .ToListAsync();
 
-            if (userAudio == null)
+            if (userAudios == null)
             {
                 return NotFound();
             }
 
-            return userAudio;
+            return userAudios;
         }
 
 
