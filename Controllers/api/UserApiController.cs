@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 
 
 
+
 namespace projekt_webbservice.Controllers.api
 {
     [Route("api/[controller]")]
@@ -317,6 +318,20 @@ namespace projekt_webbservice.Controllers.api
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
             }
+        }
+
+        // POST: api/UserApi/uploadimg/{id}
+        [HttpPost("uploadimg/{id}")]
+        public async Task<ActionResult<User>> UploadImg([FromRoute] int id, IFormFile img)
+        {
+            var user = await _context.User.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
         }
 
 

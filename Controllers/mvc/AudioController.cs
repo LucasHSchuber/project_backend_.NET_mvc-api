@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using NAudio.Wave;
+
+using System.IO;
 
 namespace projekt_webbservice.Controllers.mvc
 {
@@ -67,23 +73,51 @@ namespace projekt_webbservice.Controllers.mvc
             if (ModelState.IsValid)
             {
 
+                // if (audio.ImageFile != null)
+                // {
+
+                //     //generate new file name
+                //     string fileName = Path.GetFileNameWithoutExtension(audio.ImageFile.FileName);
+                //     string extension = Path.GetExtension(audio.ImageFile.FileName);
+
+                //     audio.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + extension;
+
+                //     string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
+
+                //     //store in file system
+                //     using (var fileStream = new FileStream(path, FileMode.Create))
+                //     {
+                //         await audio.ImageFile.CopyToAsync(fileStream);
+                //     }
+
+                // }
+                // else
+                // {
+                //     audio.ImageName = "empty.jpg";
+                // }
+
                 if (audio.ImageFile != null)
                 {
-
-                    //generate new file name
-                    string fileName = Path.GetFileNameWithoutExtension(audio.ImageFile.FileName);
-                    string extension = Path.GetExtension(audio.ImageFile.FileName);
-
-                    audio.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + extension;
-
-                    string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
-
-                    //store in file system
-                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    // Resize and compress the image
+                    using (var image = SixLabors.ImageSharp.Image.Load(audio.ImageFile.OpenReadStream()))
                     {
-                        await audio.ImageFile.CopyToAsync(fileStream);
-                    }
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max, // Choose resize mode
+                            Size = new SixLabors.ImageSharp.Size(800, 600) // Set the maximum dimensions
+                        }));
 
+                        // Save the compressed image
+                        string fileName = $"compressed_{Path.GetFileName(audio.ImageFile.FileName)}";
+                        string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            image.Save(fileStream, new JpegEncoder { Quality = 80 }); // Adjust quality as needed
+                        }
+
+                        // Set the compressed image name
+                        audio.ImageName = fileName;
+                    }
                 }
                 else
                 {
@@ -110,7 +144,7 @@ namespace projekt_webbservice.Controllers.mvc
                 }
                 else
                 {
-                    audio.FilePath = "empty.jpg";
+                    audio.FilePath = "empty.mp3";
                 }
 
 
