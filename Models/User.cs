@@ -15,12 +15,8 @@ namespace project_webbservice.Models
         [Key]
         public int UserId { get; set; }
         public string? Username { get; set; }
-
-        [Required]
         public string? Name { get; set; }
-        [Required]
         public string? Email { get; set; }
-        [Required]
         public string? PasswordHash { get; set; }
         public string? Token { get; set; }
 

@@ -69,21 +69,21 @@ namespace projekt_webbservice.Controllers.api
         }
 
 
-        // GET: api/UserApi/mylist/5
-        [HttpGet("test")]
-        public async Task<ActionResult<List<Audio>>> GetUserAudio(int id)
-        {
-            var userAudios = await _context.Audio
-            .Include(a => a.Category) // Include the Category navigation property
-            .ToListAsync();
+        // // GET: api/UserApi/mylist/5
+        // [HttpGet("test")]
+        // public async Task<ActionResult<List<Audio>>> GetUserAudio(int id)
+        // {
+        //     var userAudios = await _context.Audio
+        //     .Include(a => a.Category) // Include the Category navigation property
+        //     .ToListAsync();
 
-            if (userAudios == null)
-            {
-                return NotFound();
-            }
+        //     if (userAudios == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            return userAudios;
-        }
+        //     return userAudios;
+        // }
 
 
 
@@ -92,14 +92,39 @@ namespace projekt_webbservice.Controllers.api
         // PUT: api/UserApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, [FromBody] User user)
         {
-            if (id != user.UserId)
+            // if (id != user.UserId)
+            // {
+            //     return BadRequest("No user found");
+            // }
+
+            var requestedUser = await _context.User.FindAsync(id);
+
+            if (requestedUser == null)
             {
-                return BadRequest();
+                return NotFound("No user found");
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+            {
+                requestedUser.Email = user.Email;
+            }
+            if (!string.IsNullOrWhiteSpace(user.Username))
+            {
+                requestedUser.Username = user.Username;
+            }
+            if (!string.IsNullOrWhiteSpace(user.PasswordHash))
+            {
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+                requestedUser.PasswordHash = hashedPassword;
+            }
+            if (!string.IsNullOrWhiteSpace(user.Name))
+            {
+                requestedUser.Name = user.Name;
+            }
+
 
             try
             {
@@ -117,7 +142,8 @@ namespace projekt_webbservice.Controllers.api
                 }
             }
 
-            return NoContent();
+            // return NoContent();
+            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
 
 
@@ -338,10 +364,6 @@ namespace projekt_webbservice.Controllers.api
 
 
 
-
-
-
-
         // DELETE: api/UserApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -349,7 +371,7 @@ namespace projekt_webbservice.Controllers.api
             var user = await _context.User.FindAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound("No user found");
             }
 
             _context.User.Remove(user);
