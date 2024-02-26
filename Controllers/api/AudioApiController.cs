@@ -44,6 +44,30 @@ namespace projekt_webbservice.Controllers.api
             return audioDtos;
         }
 
+        // GET: api/AudioApi/bycategory
+        [HttpGet("bycategory/{category}")]
+        public async Task<ActionResult<IEnumerable<AudioDto>>> GetAudio(string category)
+        {
+            var audioDtos = await _context.Audio
+                .Include(a => a.Category) // Include the Category navigation property
+                .Where(a => a.Category.Name == category)
+                .Select(a => new AudioDto
+                {
+                    AudioID = a.AudioID,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Duration = a.Duration,
+                    Created = a.Created,
+                    ImageName = a.ImageName,
+                    FilePath = a.FilePath,
+                    CategoryName = a.Category.Name // Include the Category name
+                })
+                .ToListAsync();
+
+            return audioDtos;
+        }
+
+
         // GET: api/AudioApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Audio>> GetAudio(int id)
