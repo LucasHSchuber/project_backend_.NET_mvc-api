@@ -79,6 +79,8 @@ namespace projekt_webbservice.Controllers.api
             return NoContent();
         }
 
+
+
         // POST: api/UserAudioApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -94,7 +96,7 @@ namespace projekt_webbservice.Controllers.api
 
             if (alreadyExists)
             {
-                return BadRequest("User already has the audio in the table.");
+                return BadRequest("User already has the audio in the list.");
             }
 
             try
@@ -113,6 +115,8 @@ namespace projekt_webbservice.Controllers.api
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while saving UserAudio.");
             }
         }
+
+
 
 
         // DELETE: api/UserAudioApi/5

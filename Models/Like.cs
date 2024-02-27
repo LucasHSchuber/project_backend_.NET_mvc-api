@@ -9,6 +9,7 @@ namespace project_webbservice.Models
     public class Like
     {
 
+        [Key]
         public int LikeID { get; set; }
         public int UserID { get; set; }
         public int AudioID { get; set; }
