@@ -363,22 +363,32 @@ namespace projekt_webbservice.Controllers.api
 
 
 
-
-        // DELETE: api/UserApi/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id, [FromQuery] string passwordConfirm)
         {
+            // Hämta användaren från databasen baserat på id
             var user = await _context.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound("No user found");
             }
 
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
+            // Jämför lösenordsbekräftelsen med användarens faktiska lösenord
+            if (BCrypt.Net.BCrypt.Verify(passwordConfirm, user.PasswordHash))
+            {
+                // Om lösenordsbekräftelsen är korrekt, ta bort användaren från databasen
+                _context.User.Remove(user);
+                await _context.SaveChangesAsync();
 
-            return NoContent();
+                return NoContent();
+            }
+            else
+            {
+                // Om lösenordsbekräftelsen inte matchar användarens lösenord, returnera ett felmeddelande
+                return BadRequest("Incorrect password");
+            }
         }
+
 
         private bool UserExists(int id)
         {
