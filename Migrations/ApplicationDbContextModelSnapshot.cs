@@ -264,6 +264,9 @@ namespace projekt_webbservice.Migrations
                     b.Property<string>("ImageName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageNameOriginal")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 

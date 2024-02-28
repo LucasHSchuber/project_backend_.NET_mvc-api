@@ -15,17 +15,16 @@ namespace project_webbservice.Models
         public string? Description { get; set; }
         public TimeSpan Duration { get; set; }
         public string? ImageName { get; set; }
+        public string? ImageNameOriginal { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
 
 
         [NotMapped]
-        // [Display(Name = "Bild")]
         public IFormFile? ImageFile { get; set; } // audio image
         public string? FilePath { get; set; }
 
 
         [NotMapped]
-        // [Display(Name = "Ljud")]
         public IFormFile? AudioFile { get; set; } // Property to hold the uploaded audio file
         public byte[]? AudioData { get; set; } // Property to store the binary data of the audio file
 

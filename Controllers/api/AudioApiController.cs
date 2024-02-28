@@ -36,6 +36,7 @@ namespace projekt_webbservice.Controllers.api
                     Duration = a.Duration,
                     Created = a.Created,
                     ImageName = a.ImageName,
+                    ImageNameOriginal = a.ImageNameOriginal,
                     FilePath = a.FilePath,
                     CategoryName = a.Category.Name // Include the Category name
                 })

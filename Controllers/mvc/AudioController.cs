@@ -98,6 +98,15 @@ namespace projekt_webbservice.Controllers.mvc
 
                 if (audio.ImageFile != null)
                 {
+
+                    // Save the original image
+                    string originalFileName = $"original_{Path.GetFileName(audio.ImageFile.FileName)}";
+                    string originalPath = Path.Combine(wwwRootPath + "/imgupload", originalFileName);
+                    using (var originalFileStream = new FileStream(originalPath, FileMode.Create))
+                    {
+                        await audio.ImageFile.CopyToAsync(originalFileStream);
+                    }
+
                     // Resize and compress the image
                     using (var image = SixLabors.ImageSharp.Image.Load(audio.ImageFile.OpenReadStream()))
                     {
@@ -115,6 +124,8 @@ namespace projekt_webbservice.Controllers.mvc
                             image.Save(fileStream, new JpegEncoder { Quality = 80 }); // Adjust quality as needed
                         }
 
+                        // Set the UNcompressed image name
+                        audio.ImageNameOriginal = originalFileName;
                         // Set the compressed image name
                         audio.ImageName = fileName;
                     }
