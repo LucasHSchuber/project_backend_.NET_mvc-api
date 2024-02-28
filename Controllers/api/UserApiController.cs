@@ -9,6 +9,8 @@ using project_webbservice.Models;
 using projekt_webbservice.Data;
 using BCrypt.Net;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+
 
 
 
@@ -109,22 +111,56 @@ namespace projekt_webbservice.Controllers.api
 
             if (!string.IsNullOrWhiteSpace(user.Email))
             {
-                requestedUser.Email = user.Email;
+                var emailExists = await _context.User
+                    .AnyAsync(u => u.Email.ToLower() == user.Email.ToLower());
+
+                if (!Regex.IsMatch(user.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+                {
+                    return BadRequest("Invalid email format");
+                }
+
+                if (emailExists)
+                {
+                    return Conflict("Email already exists");
+                }
+                else
+                {
+                    requestedUser.Email = user.Email;
+                }
+
             }
             if (!string.IsNullOrWhiteSpace(user.Username))
             {
-                requestedUser.Username = user.Username;
+                var usernameExists = await _context.User
+                    .AnyAsync(u => u.Username.ToLower() == user.Username.ToLower());
+
+                if (usernameExists)
+                {
+                    return Conflict("Username already exists");
+                }
+                else
+                {
+                    requestedUser.Username = user.Username;
+                }
+
             }
             if (!string.IsNullOrWhiteSpace(user.PasswordHash))
             {
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-                requestedUser.PasswordHash = hashedPassword;
+
+                if (user.PasswordHash.Length > 4)
+                {
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+                    requestedUser.PasswordHash = hashedPassword;
+                }
+                else
+                {
+                    return Conflict("Password must contain at least 5 characters");
+                }
             }
             if (!string.IsNullOrWhiteSpace(user.Name))
             {
                 requestedUser.Name = user.Name;
             }
-
 
             try
             {
@@ -156,29 +192,47 @@ namespace projekt_webbservice.Controllers.api
         public async Task<ActionResult<User>> PostUser([FromBody] User user)
         {
 
+            List<string> ConflictError = new List<string>();
             //check is email exists when creating user
             var emailExists = await _context.User
                  .AnyAsync(u => u.Email == user.Email);
 
             if (emailExists)
             {
-                return Conflict("Email already exists");
-
+                ConflictError.Add("Email already exists");
             }
+            else if (!Regex.IsMatch(user.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+            {
+                ConflictError.Add("Invalid email format");
+            }
+
             //check is username exists when creating user
             var usernameExists = await _context.User
                  .AnyAsync(u => u.Username == user.Username);
 
             if (usernameExists)
             {
-                return Conflict("Username already exists");
+                ConflictError.Add("Username already exists");
 
             }
             //check if passwords matches
             string rpassword = HttpContext.Request.Query["rpassword"];
             if (rpassword != user.PasswordHash)
             {
-                return Conflict("Passwords doesnt match");
+                ConflictError.Add("Passwords doesn't match");
+            }
+            else
+            {
+                if (user.PasswordHash.Length < 5)
+                {
+                    ConflictError.Add("Password must contain at least 5 characters");
+                }
+            }
+
+            // If there are any conflict errors, return them
+            if (ConflictError.Any())
+            {
+                return Conflict(ConflictError);
             }
 
 
@@ -215,13 +269,11 @@ namespace projekt_webbservice.Controllers.api
             }
         }
 
-
         // POST: api/UserApi/login
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("login")]
         public async Task<ActionResult<User>> LoginUser([FromBody] User user)
         {
-
 
             // Validate input
             if (string.IsNullOrEmpty(user.PasswordHash) || string.IsNullOrEmpty(user.Email) || user == null)
