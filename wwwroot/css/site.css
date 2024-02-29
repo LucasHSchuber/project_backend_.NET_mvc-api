@@ -8,7 +8,12 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -22,21 +27,91 @@ body {
 }
 
 
+/* HEADER */
 
-.audio-box{
+.navbar {
+  padding: 1em 3em;
+}
+
+.logo {
+  width: 40px;
+}
+
+/* AUDIO : Controller */
+
+.audio-box {
   background-size: cover;
-  padding: 2em;
-  /* min-width: 25em ; */
-  /* max-width: 25em ; */
+  padding: 1em;
+  min-height: 23em;
   height: fit-content;
   color: white;
   border-radius: 10px;
 }
 
+.audio-box .title {
+  font-size: 1.3em;
+}
+
+.audio-box .description {
+  font-size: 1em;
+}
 
 .audio {
-  width: 100%; 
+  width: 100%;
   height: 2.5em !important;
-  /* background-color: rgb(223, 19, 19); */
   border-radius: 3px;
+}
+
+.button-box {
+  background-color: rgb(0, 0, 0, 0.2);
+  height: 2em;
+}
+
+.button-box a {
+  color: white !important;
+}
+
+.audio-create-box,
+.audio-edit-box {
+  margin: 0 auto;
+}
+
+@media (max-width: 776px) {
+  .audio-box {
+    min-height: 15em;
+  }
+}
+
+
+
+/* AVATAR : Controller */
+
+.avatar-img-box {
+  width: 9em;
+  margin: 0.2em;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
+.avatar-img-box:hover {
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  background-color: rgb(242, 242, 242);
+  border-radius: 4px;
+}
+
+.avatar-img {
+  padding: 1em;
+  width: 7em;
+}
+
+.avatar-create-box {
+  margin: 0 auto;
+}
+
+
+/* CATEGORY : Controller */
+
+.category-create-box,
+.category-edit-box {
+  margin: 0 auto;
 }

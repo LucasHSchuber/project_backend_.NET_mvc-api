@@ -14,102 +14,108 @@
 </head>
 
 <body>
+    <div class="page-title">
+        <h1>Meditations</h1>
+    </div>
     <p>
         <a asp-action="Create">Create New</a>
     </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.AudioID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Duration)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageNameOriginal)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FilePath)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AudioID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageNameOriginal)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Created)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FilePath)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category.Name)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.AudioID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.AudioID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.AudioID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @* <table class="table">
+    <thead>
+    <tr>
+    <th>
+    @Html.DisplayNameFor(model => model.AudioID)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.Title)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.Description)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.Duration)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.ImageName)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.ImageNameOriginal)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.Created)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.FilePath)
+    </th>
+    <th>
+    @Html.DisplayNameFor(model => model.Category)
+    </th>
+    <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+    <tr>
+    <td>
+    @Html.DisplayFor(modelItem => item.AudioID)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Duration)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.ImageName)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.ImageNameOriginal)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Created)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.FilePath)
+    </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Category.Name)
+    </td>
+    <td>
+    <a asp-action="Edit" asp-route-id="@item.AudioID">Edit</a> |
+    <a asp-action="Details" asp-route-id="@item.AudioID">Details</a> |
+    <a asp-action="Delete" asp-route-id="@item.AudioID">Delete</a>
+    </td>
+    </tr>
+    }
+    </tbody>
+    </table> *@
 
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="audio-box my-3 mx-3 col-3" style="background-image: url('imgupload/@item.ImageName');">
-                <audio class="audio my-4" controls src="audioupload/@Html.DisplayFor(modelItem => item.FilePath)"></audio>
-                <div class="d-flex">
-                    <div class="" style="width: 50%;">
-                        <h1 class="title">@item.Title</h1>
-                        <p class="category">@item.Category.Name</p>
-                        <p class="duration">@item.Duration</p>
-                    </div>
-                    <div class="" style="width: 50%;">
-                        <p class="description">@item.Description</p>
-                    </div>
-                </div>
-
+    <div class="row d-flex justify-content-center">
+    @foreach (var item in Model)
+    {
+        <div class="audio-box my-2 mx-2 col-lg-2 col-md-3" style="background-image: url('imgupload/@item.ImageName');">
+            <audio class="audio my-4" controls src="audioupload/@Html.DisplayFor(modelItem => item.FilePath)"></audio>
+            <div class="">
+                <h1 class="title">@item.Title</h1>
+                <p class="category"><em>@item.Category.Name</em></p>
+                @if (item.Description != null)
+                {
+                    <p class="description">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
+                }
             </div>
-        }
-    </div>
+            <div class="d-flex button-box px-1">
+                <a asp-action="Edit" asp-route-id="@item.AudioID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AudioID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AudioID">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
 </body>
 
 </html>

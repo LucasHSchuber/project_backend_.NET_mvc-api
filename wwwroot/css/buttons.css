@@ -1,0 +1,29 @@
+/* BUTTONS */
+
+.button {
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.6em 2.2em;
+    border: 1px solid rgb(255, 255, 255, 0);
+    color: rgb(34, 34, 34);
+}
+
+.standard {
+    background-color: rgb(35, 35, 35);
+    color: white;
+    transition: 0.2s;
+}
+
+.standard:hover {
+    background-color: rgb(21, 21, 21);
+}
+
+.delete {
+    background-color: rgb(255, 0, 0);
+    color: white;
+    transition: 0.2s;
+}
+.delete:hover {
+    background-color: rgb(211, 0, 0);
+}

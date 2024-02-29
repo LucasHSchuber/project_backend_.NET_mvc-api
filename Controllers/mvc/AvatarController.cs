@@ -19,7 +19,7 @@ namespace projekt_webbservice.Controllers
 
         public AvatarController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
-           _context = context;
+            _context = context;
             _hostEnvironment = hostEnvironment;
             wwwRootPath = hostEnvironment.WebRootPath;
         }
@@ -29,6 +29,30 @@ namespace projekt_webbservice.Controllers
         {
             return View(await _context.Avatar.ToListAsync());
         }
+
+
+        // // GET: Avatar - amount of usage by users
+        // public async Task<IActionResult> AvatarUsageCount()
+        // {
+        //     //all avatars
+        //     var avatarList = await _context.Avatar.ToListAsync();
+        //     //create list
+        //     var avatarUsageCountList = new List<(int AvatarId, int UsageCount)>();
+
+        //     foreach (var avatar in avatarList)
+        //     {
+        //         var usageCount = await _context.User.CountAsync(a => a.AvatarId == avatar.AvatarId);
+        //         avatarUsageCountList.Add((avatar.AvatarId, usageCount));
+        //     }
+        //     // Set ViewData with the avatarUsageCountList
+        //     ViewData["AvatarUsageCountList"] = avatarUsageCountList;
+
+        //     // Retrieve the list of avatars
+        //     var avatars = await _context.Avatar.ToListAsync();
+
+        //     // Return the Index view with the list of avatars
+        //     return View("Index", avatars); 
+        // }
 
         // GET: Avatar/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -66,7 +90,6 @@ namespace projekt_webbservice.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 if (avatar.AvatarImageFile != null)
                 {
 
@@ -86,7 +109,8 @@ namespace projekt_webbservice.Controllers
                 }
                 else
                 {
-                    avatar.AvatarImageName = "empty.jpg";
+                    ModelState.AddModelError(string.Empty, "Please select an image file.");
+                    return View(avatar);
                 }
 
                 _context.Add(avatar);
@@ -123,7 +147,7 @@ namespace projekt_webbservice.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AvatarId,AvatarImageName")] Avatar avatar)
+        public async Task<IActionResult> Edit(int id, [Bind("AvatarId,AvatarImageName,AvatarImageFile")] Avatar avatar)
         {
             if (id != avatar.AvatarId)
             {
@@ -132,26 +156,32 @@ namespace projekt_webbservice.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (avatar.AvatarImageFile != null)
                 {
-                    _context.Update(avatar);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AvatarExists(avatar.AvatarId))
+                    //generate new file name
+                    string fileName = Path.GetFileNameWithoutExtension(avatar.AvatarImageFile.FileName);
+                    string extension = Path.GetExtension(avatar.AvatarImageFile.FileName);
+
+                    avatar.AvatarImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + extension;
+
+                    string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
+
+                    //store in file system
+                    using (var fileStream = new FileStream(path, FileMode.Create))
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        await avatar.AvatarImageFile.CopyToAsync(fileStream);
                     }
                 }
+
+                _context.Update(avatar);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
             return View(avatar);
         }
+
+
 
         // GET: Avatar/Delete/5
         public async Task<IActionResult> Delete(int? id)

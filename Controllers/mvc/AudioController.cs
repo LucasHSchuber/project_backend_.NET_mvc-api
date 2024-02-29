@@ -72,33 +72,9 @@ namespace projekt_webbservice.Controllers.mvc
         {
             if (ModelState.IsValid)
             {
-
-                // if (audio.ImageFile != null)
-                // {
-
-                //     //generate new file name
-                //     string fileName = Path.GetFileNameWithoutExtension(audio.ImageFile.FileName);
-                //     string extension = Path.GetExtension(audio.ImageFile.FileName);
-
-                //     audio.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + extension;
-
-                //     string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
-
-                //     //store in file system
-                //     using (var fileStream = new FileStream(path, FileMode.Create))
-                //     {
-                //         await audio.ImageFile.CopyToAsync(fileStream);
-                //     }
-
-                // }
-                // else
-                // {
-                //     audio.ImageName = "empty.jpg";
-                // }
-
+                //checks if image file is passed to backend
                 if (audio.ImageFile != null)
                 {
-
                     // Save the original image
                     string originalFileName = $"original_{Path.GetFileName(audio.ImageFile.FileName)}";
                     string originalPath = Path.Combine(wwwRootPath + "/imgupload", originalFileName);
@@ -132,15 +108,14 @@ namespace projekt_webbservice.Controllers.mvc
                 }
                 else
                 {
-                    audio.ImageName = "empty.jpg";
+                    // ModelState.AddModelError(string.Empty, "Please select an image file.");
+                    return View(audio);
                 }
 
-
-
+                //checks if audio file is passed to backend
                 if (audio.AudioFile != null)
                 {
                     // Handle audio file upload
-
                     string audioFileName = Path.GetFileNameWithoutExtension(audio.AudioFile.FileName);
                     string audioExtension = Path.GetExtension(audio.AudioFile.FileName);
                     string uniqueAudioFileName = audioFileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + audioExtension;
@@ -155,11 +130,9 @@ namespace projekt_webbservice.Controllers.mvc
                 }
                 else
                 {
-                    audio.FilePath = "empty.mp3";
+                    // ModelState.AddModelError(string.Empty, "Please select an audio file");
+                    return View(audio);
                 }
-
-
-
 
                 audio.Created = DateTime.Now;
 
@@ -167,9 +140,13 @@ namespace projekt_webbservice.Controllers.mvc
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "CategoryId", audio.CategoryID);
+            
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name", audio.CategoryID);
             return View(audio);
         }
+
+
+
 
         // GET: Audio/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -184,7 +161,7 @@ namespace projekt_webbservice.Controllers.mvc
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "CategoryId", audio.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name", audio.CategoryID);
             return View(audio);
         }
 
