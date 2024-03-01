@@ -1,4 +1,3 @@
-
 @model IEnumerable<project_webbservice.Models.Avatar>
 
 @{
@@ -23,9 +22,9 @@
     <div class="page-title">
         <h1>Avatars</h1>
     </div>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+    <div class="my-4">
+        <a asp-action="Create" class="button standard">Create New <i class="fa-plus fa-solid fa-1x"></i></a>
+    </div>
     @* <table class="table">
     <thead>
     <tr>
@@ -55,7 +54,7 @@
     <div class="row d-flex justify-content-center">
         @foreach (var item in Model)
         {
-            <div class="avatar-img-box col-lg-2 col-sm-3">
+            <div class="avatar-img-box col-lg-2 col-sm-3" onclick="redirectToDetails(@item.AvatarId)">
                 <div>
                     <img class="avatar-img" src="@($"imgupload/{item.AvatarImageName}")" alt="avatar @(item.AvatarId)" />
                 </div>
@@ -74,3 +73,9 @@
 </body>
 
 </html>
+
+<script>
+    function redirectToDetails(avatarId) {
+        window.location.href = '@Url.Action("Details", "Avatar")/' + avatarId;
+    }
+</script>

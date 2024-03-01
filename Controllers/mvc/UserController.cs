@@ -19,11 +19,34 @@ namespace projekt_webbservice.Controllers.mvc
             _context = context;
         }
 
-        // GET: User
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchstring)
         {
-            return View(await _context.User.ToListAsync());
+            // If searchstring is null or empty
+            if (string.IsNullOrEmpty(searchstring))
+            {
+                var allLikes = await _context.User.ToListAsync();
+                return View(allLikes);
+            }
+            else
+            {
+                // If searchstring exists
+                var searchResult = await _context.User
+                    .Where(a => a.Username.ToLower().Contains(searchstring.ToLower())
+                    || a.Name.ToLower().Contains(searchstring.ToLower())
+                    || a.Email.ToLower().Contains(searchstring.ToLower()))
+                    .ToListAsync();
+
+                ViewBag.search = searchstring;
+                return View(searchResult);
+            }
         }
+        // GET: User
+
+        // public async Task<IActionResult> Index()
+        // {
+        //     return View(await _context.User.ToListAsync());
+        // }
+
 
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)

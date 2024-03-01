@@ -14,10 +14,10 @@
 </head>
 
 <body>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
+    <div class="page-title">
+        <h4>Meditations on users lists</h4>
+    </div>
+    <table class="table mb-5">
         <thead>
             <tr>
                 <th>
@@ -43,7 +43,7 @@
                         @Html.DisplayFor(modelItem => item.User.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Audio.AudioID)
+                        @Html.DisplayFor(modelItem => item.Audio.Title)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.UserAudioId">Edit</a> |
@@ -54,6 +54,45 @@
             }
         </tbody>
     </table>
+
+
+    <div class="page-title">
+        <h4>Top three added meditations</h4>
+    </div>
+    <table class="table mb-5">
+        <thead>
+            <tr>
+                <th>
+                    Title 
+                </th>
+                <th>
+                    Count
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                // Group Useraudio records by audioId
+                var audioCounts = Model.GroupBy(u => u.Audio.Title)
+                .Select(g => new { Title = g.Key, Count = g.Count() });
+
+                var audioCount5 = audioCounts.OrderByDescending(y => y.Count).Take(5);
+            }
+            @foreach (var audioCount in audioCount5)
+            {
+                <tr>
+                    <td>
+                        @audioCount.Title
+                    </td>
+                    <td>
+                        @audioCount.Count
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </body>
 
 </html>

@@ -41,11 +41,21 @@ body {
 
 .audio-box {
   background-size: cover;
-  padding: 1em;
-  min-height: 23em;
+  min-height: 27em;
   height: fit-content;
   color: white;
   border-radius: 10px;
+  transition: 0.2s;
+  border: 1px solid rgb(193, 193, 193);
+}
+
+.audio-box:hover {
+  border: 1px solid rgb(102, 102, 102);
+  cursor: pointer;
+}
+
+.audio-box-content {
+  padding: 0.5em;
 }
 
 .audio-box .title {
@@ -54,6 +64,10 @@ body {
 
 .audio-box .description {
   font-size: 1em;
+}
+
+.audio-box .category {
+  color: white !important;
 }
 
 .audio {
@@ -72,7 +86,8 @@ body {
 }
 
 .audio-create-box,
-.audio-edit-box {
+.audio-edit-box,
+.audio-details-box {
   margin: 0 auto;
 }
 
@@ -108,10 +123,34 @@ body {
   margin: 0 auto;
 }
 
+@media (max-width: 776px) {}
 
 /* CATEGORY : Controller */
 
 .category-create-box,
 .category-edit-box {
   margin: 0 auto;
+}
+
+.category-index-table {
+  width: 50%;
+  margin: auto;
+}
+
+@media (max-width: 991px) {
+  .category-index-table {
+    width: 100%;
+  }
+}
+
+
+/* USER */
+
+.user-edit-box, .user-details-box {
+  margin: 0 auto;
+}
+
+.user-table-row:hover {
+  background-color: rgb(224, 224, 224);
+  cursor: pointer;
 }

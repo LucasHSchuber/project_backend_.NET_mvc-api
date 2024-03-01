@@ -17,9 +17,10 @@
     <div class="page-title">
         <h1>Meditations</h1>
     </div>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+    <div class="mt-4">
+        <a asp-action="Create" class="button standard">Create New <i class="fa-plus fa-solid fa-1x"></i></a>
+    </div>
+
     @* <table class="table">
     <thead>
     <tr>
@@ -94,28 +95,43 @@
     </tbody>
     </table> *@
 
-    <div class="row d-flex justify-content-center">
-    @foreach (var item in Model)
-    {
-        <div class="audio-box my-2 mx-2 col-lg-2 col-md-3" style="background-image: url('imgupload/@item.ImageName');">
-            <audio class="audio my-4" controls src="audioupload/@Html.DisplayFor(modelItem => item.FilePath)"></audio>
-            <div class="">
-                <h1 class="title">@item.Title</h1>
-                <p class="category"><em>@item.Category.Name</em></p>
-                @if (item.Description != null)
-                {
-                    <p class="description">@(item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)</p>
-                }
+    <div class="row d-flex justify-content-center my-5">
+        @foreach (var item in Model)
+        {
+            <div class="audio-box mt-2 mb-1 mx-1 col-lg-2 col-md-3" style="background-image: url('imgupload/@item.ImageName');"
+                onclick="redirectToDetails(@item.AudioID)">
+                <audio class="audio mt-3 mb-1" controls src="audioupload/@Html.DisplayFor(modelItem => item.FilePath)"></audio>
+                <div class="audio-box-content">
+                    <h1 class="title">@item.Title</h1>
+                    <a class="category link" asp-action="Details" asp-controller="Category"
+                        asp-route-id="@item.Category.CategoryId"><em>@item.Category.Name</em></a>
+                    @if (item.Description != null)
+                    {
+                        <p class="description my-3">@(item.Description.Length > 75 ? item.Description.Substring(0, 75) + "..."
+                    :
+                    item.Description)</p>
+                    }
+                </div>
+                <div class="d-flex flex-column align-items-center">
+                    <a asp-action="Edit" asp-route-id="@item.AudioID" class="button standard full-size">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.AudioID" class="button standard full-size">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.AudioID" class="button standard full-size">Delete</a>
+                </div>
+                @* <div class="d-flex button-box px-1">
+            <a asp-action="Edit" asp-route-id="@item.AudioID">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.AudioID">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.AudioID">Delete</a>
+            </div> *@
             </div>
-            <div class="d-flex button-box px-1">
-                <a asp-action="Edit" asp-route-id="@item.AudioID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AudioID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AudioID">Delete</a>
-            </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
 </body>
 
 </html>
+
+<script>
+    function redirectToDetails(audioId) {
+        window.location.href = '@Url.Action("Details", "Audio")/' + audioId;
+    }
+</script>

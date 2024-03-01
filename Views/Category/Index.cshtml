@@ -13,39 +13,57 @@
     <title>Index</title>
 </head>
 
-<div class="page-title">
-    <h1>Categories</h1>
-</div>
 
 <body>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+
+    <div class="page-title">
+        <h1>Category</h1>
+    </div>
+    <div class="my-4">
+        <a asp-action="Create" class="button standard">Create New <i class="fa-plus fa-solid fa-1x"></i></a>
+    </div>
+
+    <div class="category-index-table row d-flex justify-content-center">
+
+        <table class="table my-5">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoryId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.CategoryId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a class="button standard" asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+                            <a class="button delete" asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
+
+<style>
+
+</style>
+
+<script>
+
+</script>

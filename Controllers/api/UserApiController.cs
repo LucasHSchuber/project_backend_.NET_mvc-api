@@ -205,7 +205,6 @@ namespace projekt_webbservice.Controllers.api
             {
                 ConflictError.Add("Invalid email format");
             }
-
             //check is username exists when creating user
             var usernameExists = await _context.User
                  .AnyAsync(u => u.Username == user.Username);
@@ -239,6 +238,9 @@ namespace projekt_webbservice.Controllers.api
             // Hash the password using bcrypt
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
             user.PasswordHash = hashedPassword;
+
+            //select default avataId
+            user.AvatarId = 1;
 
             user.Created = DateTime.Now;
             _context.User.Add(user);

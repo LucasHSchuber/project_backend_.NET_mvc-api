@@ -19,12 +19,21 @@
     <hr />
     <div class="row">
         <div class="col-md-4 my-5 avatar-create-box">
+            <h5>Edit avatar @Model.AvatarId</h5>
+            <div class="d-flex edit-images-box align-items-center">
+                <div class="image-div">
+                    <img class="old-avatar-image image" src="~/imgupload/@Model.AvatarImageName" alt="old-avatar-img" />
+                </div>
+                <i class="mx-3 icon fa-solid fa-2x fa-shuffle"></i>
+                <div id="imagePreview" class="image-div"></div>
+            </div>
+
             <form asp-action="Edit" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="AvatarId" />
                 <div class="form-group">
                     <label asp-for="AvatarImageFile" class="control-label"></label>
-                    <input asp-for="AvatarImageFile" class="form-control" />
+                    <input asp-for="AvatarImageFile" class="form-control" onchange="previewImage(event)" />
                     <span asp-validation-for="AvatarImageFile" class="text-danger"></span>
                 </div>
                 <div class="form-group my-3">
@@ -41,3 +50,39 @@
 </body>
 
 </html>
+
+<script>
+    const previewImage = (event) => {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById('imagePreview');
+                preview.style.display = "block";
+                preview.innerHTML = `<img src="${e.target.result}" class="new-avatar-img image" />`;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<style>
+    .edit-images-box {
+        width: 20em !important;
+        margin: auto;
+    }
+
+    #imagePreview {
+        display: none;
+    }
+
+    .image {
+        width: 7em !important;
+        padding: 0.2em;
+    }
+
+    .icon {
+        color: black;
+        border: 1 px solid black;
+    }
+</style>

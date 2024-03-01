@@ -25,6 +25,29 @@ namespace projekt_webbservice.Controllers.mvc
             var applicationDbContext = _context.Like.Include(l => l.Audio).Include(l => l.User);
             return View(await applicationDbContext.ToListAsync());
         }
+        // public async Task<IActionResult> Index(string searchstring)
+        // {
+        //     // If searchstring is null or empty
+        //     if (string.IsNullOrEmpty(searchstring))
+        //     {
+        //         var allLikes = await _context.Like.ToListAsync();
+        //         return View(allLikes);
+        //     }
+        //     else
+        //     {
+        //         // If searchstring exists
+        //         // If searchstring exists
+        //         // If searchstring exists
+        //         var searchResult = await _context.Like
+        //             .Where(a => a.LikeID.ToString().Contains(searchstring.ToLower()))
+        //             .ToListAsync();
+
+        //         ViewBag.search = searchstring;
+        //         return View(searchResult);
+        //     }
+        // }
+
+
 
         // GET: Like/Details/5
         public async Task<IActionResult> Details(int? id)

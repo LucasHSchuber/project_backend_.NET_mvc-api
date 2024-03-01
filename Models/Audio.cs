@@ -22,17 +22,17 @@ namespace project_webbservice.Models
 
 
         [NotMapped]
-        [Required]
+        // [Required]
         public IFormFile? ImageFile { get; set; } // audio image
         public string? FilePath { get; set; }
 
 
         [NotMapped]
-        [Required]
+        // [Required]
         public IFormFile? AudioFile { get; set; } // Property to hold the uploaded audio file
         public byte[]? AudioData { get; set; } // Property to store the binary data of the audio file
 
-        [Required]
+
         public int CategoryID { get; set; }
         // [ForeignKey("CategoryID")]
         public Category? Category { get; set; }

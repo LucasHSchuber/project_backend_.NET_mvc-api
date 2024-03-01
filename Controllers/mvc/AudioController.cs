@@ -106,11 +106,11 @@ namespace projekt_webbservice.Controllers.mvc
                         audio.ImageName = fileName;
                     }
                 }
-                else
-                {
-                    // ModelState.AddModelError(string.Empty, "Please select an image file.");
-                    return View(audio);
-                }
+                // else
+                // {
+                //     // ModelState.AddModelError(string.Empty, "Please select an image file.");
+                //     return View(audio);
+                // }
 
                 //checks if audio file is passed to backend
                 if (audio.AudioFile != null)
@@ -128,11 +128,11 @@ namespace projekt_webbservice.Controllers.mvc
                     }
 
                 }
-                else
-                {
-                    // ModelState.AddModelError(string.Empty, "Please select an audio file");
-                    return View(audio);
-                }
+                // else
+                // {
+                //     // ModelState.AddModelError(string.Empty, "Please select an audio file");
+                //     return View(audio);
+                // }
 
                 audio.Created = DateTime.Now;
 
@@ -140,7 +140,7 @@ namespace projekt_webbservice.Controllers.mvc
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name", audio.CategoryID);
             return View(audio);
         }
@@ -179,9 +179,20 @@ namespace projekt_webbservice.Controllers.mvc
 
             if (ModelState.IsValid)
             {
+
+                var existingAudio = await _context.Audio.FindAsync(id);
+
+                existingAudio.Title = audio.Title;
+                existingAudio.Description = audio.Description;
+                existingAudio.Duration = audio.Duration;
+                existingAudio.FilePath = audio.FilePath;
+                existingAudio.Created = audio.Created;
+                existingAudio.CategoryID = audio.CategoryID;
+
                 try
                 {
-                    _context.Update(audio);
+                    // Update entity in database
+                    _context.Update(existingAudio);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -197,9 +208,11 @@ namespace projekt_webbservice.Controllers.mvc
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "CategoryId", audio.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name", audio.CategoryID);
             return View(audio);
         }
+
+
 
         // GET: Audio/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -26,7 +26,9 @@
                     <input asp-for="AvatarImageFile" class="form-control" onchange="previewImage(event)" />
                     <span asp-validation-for="AvatarImageFile" class="text-danger"></span>
                 </div>
+               
                 <div id="imagePreview" class="form-group my-3"></div>
+                
                 <div class="form-group my-3">
                     <input type="submit" value="Create" class="button standard" />
                 </div>
@@ -46,17 +48,17 @@
 <script>
     function previewImage(event) {
         const input = event.target;
+        console.log(input);
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const preview = document.getElementById('imagePreview');
                 preview.style.display = "block";
-                preview.innerHTML = `<img src="${e.target.result}" class="img-fluid" />`;
+                preview.innerHTML = `<img src="${e.target.result}" class="avatar-img" />`;
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
-
 </script>
 
 <style>

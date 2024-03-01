@@ -5,69 +5,87 @@
 }
 
 <!DOCTYPE html>
-
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 </head>
+
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswordHash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserInfo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserInfo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="page-title">
+        <h1>Users</h1>
+    </div>
+    <div class="mt-4 mb-5">
+        <a asp-action="Create" class="button standard">Create New <i class="fa-plus fa-solid fa-1x"></i></a>
+    </div>
+
+    <div>
+        <h5>Search users by name, username or email</h5>
+    </div>
+    <form class="mb-4" asp-action="Index" asp-controller="User" method="get">
+        <input class="user-searchinput" placeholder="Search" name="searchstring" type="search" aria-label="search" />
+        <button type="submit" class="button standard">Search</button>
+        @if (!string.IsNullOrEmpty(ViewBag.search))
+        {
+            <text>
+                <div class="mt-2 ">
+                    Search for "<em>@ViewBag.search</em>" <a asp-action="Index" asp-controller="User">Remove search</a>
+                </div>
+            </text>
+        }
+        else
+        {
+            <text></text>
+        }
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.UserId)</th>
+                <th>@Html.DisplayNameFor(model => model.Username)</th>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.Created)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="user-table-row" onclick="redirectToDetails(@item.UserId)">
+                    <td>@item.UserId</td>
+                    <td>@item.Username</td>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Created</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </body>
+
 </html>
+
+<style>
+    .user-searchinput {
+        width: 30%;
+        border-radius: 3px;
+        height: 2.5em;
+        padding: 0.5em;
+
+    }
+</style>
+
+<script>
+    function redirectToDetails(userId) {
+        window.location.href = '@Url.Action("Details", "User")/' + userId;
+    }
+</script>
