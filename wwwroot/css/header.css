@@ -1,0 +1,42 @@
+/* header css */
+
+
+.navbar-brand {
+    color: black !important;
+    font-weight: 700;
+    font-size: 1.4em;
+}
+
+.navbar-collapse .nav-item {
+    font-weight: 600 !important;
+}
+
+@media (max-width: 991px) {
+    .navbar-collapse {
+        padding: 2em 2em 2em 0;
+    }
+
+    .navbar-collapse .nav-item {
+        text-align: right !important;
+        font-weight: 800 !important;
+        font-size: 1.2em !important;
+        padding-top: 0.7em;
+    }
+}
+
+/* login partial */
+
+
+.navbar-nav .nav-item .nav-link {
+    font-weight: 600 !important;
+}
+
+@media (max-width: 991px) {
+
+    .navbar-nav .nav-item .nav-link {
+        float: right;
+        font-weight: 800 !important;
+        font-size: 1em !important;
+        padding-top: 0.7em;
+    }
+}

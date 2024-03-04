@@ -22,7 +22,8 @@ namespace projekt_webbservice.Controllers.mvc
         // GET: Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View(await _context.Category
+                .Include(a => a.Audios).ToListAsync());
         }
 
         // GET: Category/Details/5
@@ -34,11 +35,18 @@ namespace projekt_webbservice.Controllers.mvc
             }
 
             var category = await _context.Category
+                .Include(a => a.Audios)
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
+
             if (category == null)
             {
                 return NotFound();
             }
+
+            // Get the count of audios in this category
+            var audioCount = category.Audios.Count;
+
+            ViewBag.AudioCount = audioCount;
 
             return View(category);
         }

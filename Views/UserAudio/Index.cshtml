@@ -15,6 +15,9 @@
 
 <body>
     <div class="page-title">
+        <h1>Lists</h1>
+    </div>
+    <div cl <div class="page-title">
         <h4>Meditations on users lists</h4>
     </div>
     <table class="table mb-5">
@@ -34,16 +37,16 @@
         </thead>
         <tbody>
             @foreach (var item in Model)
-            {
+                {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserAudioId)
+                            @Html.DisplayFor(modelItem => item.UserAudioId)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.User.Name)
+                            @Html.DisplayFor(modelItem => item.User.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Audio.Title)
+                            @Html.DisplayFor(modelItem => item.Audio.Title)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.UserAudioId">Edit</a> |
@@ -51,7 +54,7 @@
                         <a asp-action="Delete" asp-route-id="@item.UserAudioId">Delete</a>
                     </td>
                 </tr>
-            }
+                }
         </tbody>
     </table>
 
@@ -72,25 +75,25 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                // Group Useraudio records by audioId
-                var audioCounts = Model.GroupBy(u => u.Audio.Title)
-                       .Select(g => new { Title = g.Key, Count = g.Count(), Id = g.First().Audio.AudioID });
+                @{
+                    // Group Useraudio records by audioId
+                    var audioCounts = Model.GroupBy(u => u.Audio.Title)
+                    .Select(g => new { Title = g.Key, Count = g.Count(), Id = g.First().Audio.AudioID });
 
 
-                var audioCount5 = audioCounts.OrderByDescending(y => y.Count).Take(5);
-            }
-            @foreach (var audioCount in audioCount5)
-            {
+                    var audioCount5 = audioCounts.OrderByDescending(y => y.Count).Take(5);
+                }
+                @foreach (var audioCount in audioCount5)
+                {
                 <tr>
                     <td>
                         <a asp-action="Details" asp-controller="Audio" asp-route-id="@audioCount.Id">@audioCount.Title </a>
                     </td>
                     <td>
-                        @audioCount.Count
+                            @audioCount.Count
                     </td>
                 </tr>
-            }
+                }
         </tbody>
     </table>
 

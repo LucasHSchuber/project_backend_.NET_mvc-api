@@ -31,7 +31,7 @@ namespace projekt_webbservice.Controllers.mvc
         }
 
         // GET: Audio
-        public async Task<IActionResult> Index(string searchstring)
+        public async Task<IActionResult> Index(string searchstring, string displayMode)
         {
             if (!string.IsNullOrEmpty(searchstring))
             {
@@ -41,6 +41,7 @@ namespace projekt_webbservice.Controllers.mvc
                     .ToListAsync();
 
                     ViewBag.search = searchstring;
+                    // ViewBag.displayMode = displayMode;
                     return View(searchResult);
             }
             else
@@ -49,6 +50,7 @@ namespace projekt_webbservice.Controllers.mvc
                         .Include(a => a.Category)
                         .ToListAsync();
 
+                    // ViewBag.displayMode = displayMode;
                     return View(audios);
             }
             // var applicationDbContext = _context.Audio.Include(a => a.Category);

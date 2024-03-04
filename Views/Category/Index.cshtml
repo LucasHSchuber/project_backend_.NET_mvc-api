@@ -17,7 +17,7 @@
 <body>
 
     <div class="page-title">
-        <h1>Category</h1>
+        <h1>Categories</h1>
     </div>
     <div class="my-4">
         <a asp-action="Create" class="button standard">Create New <i class="fa-plus fa-solid fa-1x"></i></a>
@@ -34,14 +34,14 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-                    <th></th>
+                    <th></th
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                         <td>
+                    <tr class="user-table-row" onclick="redirectToDetails(@item.CategoryId)">
+                        <td>
                             @Html.DisplayFor(modelItem => item.CategoryId)
                         </td>
                         <td>
@@ -56,14 +56,15 @@
             </tbody>
         </table>
     </div>
+
+
+
+    <script>
+        function redirectToDetails(CategoryId) {
+            window.location.href = '@Url.Action("Details", "Category")/' + CategoryId;
+        }
+    </script>
+
 </body>
 
 </html>
-
-<style>
-
-</style>
-
-<script>
-
-</script>
