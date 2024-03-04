@@ -18,7 +18,7 @@
     <div>
         <h4>Meditations - details</h4>
         <hr />
-        <div class="col-md-4 my-5 audio-details-box">
+        <div class="col-sm-10 my-5 audio-details-box mx-auto">
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Title)
@@ -69,8 +69,8 @@
                 <a class="button standard" asp-action="Edit" asp-route-id="@Model?.AudioID">Edit</a> 
                 <a class="button delete" asp-action="Delete" asp-route-id="@Model?.AudioID">Delete</a> 
             </div>
-
         </div>
+
     </div>
 
 </body>

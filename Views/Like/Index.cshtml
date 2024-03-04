@@ -83,7 +83,7 @@
             @{
 
                 var audioFavoriteCount = Model.GroupBy(u => u.Audio.Title)
-                .Select(g => new { Title = g.Key, Count = g.Count() });
+                .Select(g => new { Title = g.Key, Count = g.Count(), Id = g.First().Audio.AudioID });
 
                 var audioFavoriteCount5 = audioFavoriteCount.OrderByDescending(x => x.Count).Take(5);
 
@@ -92,7 +92,7 @@
             {
                 <tr>
                     <td>
-                        @audioCount.Title
+                        <a asp-action="Details" asp-controller="Audio" asp-route-id="@audioCount.Id">@audioCount.Title </a>
                     </td>
                     <td>
                         @audioCount.Count

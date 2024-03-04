@@ -31,11 +31,30 @@ namespace projekt_webbservice.Controllers.mvc
         }
 
         // GET: Audio
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchstring)
         {
-            var applicationDbContext = _context.Audio.Include(a => a.Category);
-            return View(await applicationDbContext.ToListAsync());
+            if (!string.IsNullOrEmpty(searchstring))
+            {
+                var searchResult = await _context.Audio
+                    .Include(a => a.Category)
+                    .Where(a => a.Title.ToLower().Contains(searchstring.ToLower()))
+                    .ToListAsync();
+
+                    ViewBag.search = searchstring;
+                    return View(searchResult);
+            }
+            else
+            {
+                    var audios = await _context.Audio
+                        .Include(a => a.Category)
+                        .ToListAsync();
+
+                    return View(audios);
+            }
+            // var applicationDbContext = _context.Audio.Include(a => a.Category);
+            // return View(await applicationDbContext.ToListAsync());
         }
+
 
         // GET: Audio/Details/5
         public async Task<IActionResult> Details(int? id)

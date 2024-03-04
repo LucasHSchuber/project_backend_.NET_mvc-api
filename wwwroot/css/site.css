@@ -88,12 +88,20 @@ body {
 .audio-create-box,
 .audio-edit-box,
 .audio-details-box {
+  width: 50% !important;
   margin: 0 auto;
+  /* width: fit-content;  */
 }
 
-@media (max-width: 776px) {
+@media (max-width: 1012px) {
   .audio-box {
     min-height: 15em;
+  }
+
+  .audio-create-box,
+  .audio-edit-box,
+  .audio-details-box {
+    width: 75% !important;
   }
 }
 
@@ -146,7 +154,8 @@ body {
 
 /* USER */
 
-.user-edit-box, .user-details-box {
+.user-edit-box,
+.user-details-box {
   margin: 0 auto;
 }
 
