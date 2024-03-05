@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace projekt_webbservice.Controllers.mvc
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -150,9 +154,16 @@ namespace projekt_webbservice.Controllers.mvc
             var category = await _context.Category.FindAsync(id);
             if (category != null)
             {
+                //find all audios in the deleted category 
+                var audiosInCategory = await _context.Audio
+                .Where(a => a.CategoryID == category.CategoryId)
+                .ToArrayAsync();
+                //delete audios in that cateogry
+                _context.Audio.RemoveRange(audiosInCategory);
+                //delete thje category as well
                 _context.Category.Remove(category);
-            }
 
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

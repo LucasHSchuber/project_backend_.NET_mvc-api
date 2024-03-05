@@ -253,6 +253,7 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<TimeSpan>("Duration")
@@ -268,6 +269,10 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UploaderUser")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -301,6 +306,7 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("CategoryId");

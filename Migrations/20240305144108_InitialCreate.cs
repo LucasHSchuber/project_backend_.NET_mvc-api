@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace projekt_webbservice.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,7 +73,7 @@ namespace projekt_webbservice.Migrations
                 {
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,11 +218,13 @@ namespace projekt_webbservice.Migrations
                 {
                     AudioID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "TEXT", nullable: false),
                     ImageName = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageNameOriginal = table.Column<string>(type: "TEXT", nullable: true),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UploaderUser = table.Column<string>(type: "TEXT", nullable: true),
                     FilePath = table.Column<string>(type: "TEXT", nullable: true),
                     AudioData = table.Column<byte[]>(type: "BLOB", nullable: true),
                     CategoryID = table.Column<int>(type: "INTEGER", nullable: false),

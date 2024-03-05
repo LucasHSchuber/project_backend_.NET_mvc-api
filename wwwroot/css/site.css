@@ -27,21 +27,18 @@ body {
 }
 
 
-/* HEADER */
+/* HOME : Controller */
 
-.navbar {
-  padding: 1em 3em;
+.index-hero-img{
+  width: 25% !important;
 }
 
-.logo {
-  width: 40px;
-}
 
 /* AUDIO : Controller */
 
 .audio-box {
   background-size: cover;
-  min-height: 27em;
+  min-height: 20em;
   height: fit-content;
   color: white;
   border-radius: 10px;
@@ -109,13 +106,22 @@ body {
 
 @media (max-width: 1012px) {
   .audio-box {
-    min-height: 15em;
+    min-height: 20em;
   }
 
   .audio-create-box,
   .audio-edit-box,
   .audio-details-box {
     width: 75% !important;
+  }
+}
+
+@media (max-width: 772px) {
+  .audio-box {
+    min-height: 15em;
+  }
+  #audio-cards{
+    padding: 0 1em !important;
   }
 }
 

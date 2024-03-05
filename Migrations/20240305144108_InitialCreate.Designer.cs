@@ -11,8 +11,8 @@ using projekt_webbservice.Data;
 namespace projekt_webbservice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240224084645_initialCreate")]
-    partial class initialCreate
+    [Migration("20240305144108_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,6 +256,7 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<TimeSpan>("Duration")
@@ -267,7 +268,14 @@ namespace projekt_webbservice.Migrations
                     b.Property<string>("ImageName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImageNameOriginal")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UploaderUser")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -301,6 +309,7 @@ namespace projekt_webbservice.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("CategoryId");

@@ -1,5 +1,8 @@
 /* header css */
 
+.navbar {
+    padding: 1.5em 4em;
+}
 
 .navbar-brand {
     color: black !important;
@@ -9,6 +12,12 @@
 
 .navbar-collapse .nav-item {
     font-weight: 600 !important;
+}
+
+
+.logo {
+    width: 35px;
+    margin-bottom: 0.3em;
 }
 
 @media (max-width: 991px) {
@@ -25,8 +34,6 @@
 }
 
 /* login partial */
-
-
 .navbar-nav .nav-item .nav-link {
     font-weight: 600 !important;
 }

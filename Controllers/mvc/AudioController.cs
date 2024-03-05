@@ -11,11 +11,17 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using NAudio.Wave;
-
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace projekt_webbservice.Controllers.mvc
 {
+
+
+    [Authorize]
+
     public class AudioController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,6 +36,8 @@ namespace projekt_webbservice.Controllers.mvc
             wwwRootPath = hostEnvironment.WebRootPath;
         }
 
+
+
         // GET: Audio
         public async Task<IActionResult> Index(string searchstring, string displayMode)
         {
@@ -40,18 +48,18 @@ namespace projekt_webbservice.Controllers.mvc
                     .Where(a => a.Title.ToLower().Contains(searchstring.ToLower()))
                     .ToListAsync();
 
-                    ViewBag.search = searchstring;
-                    // ViewBag.displayMode = displayMode;
-                    return View(searchResult);
+                ViewBag.search = searchstring;
+                // ViewBag.displayMode = displayMode;
+                return View(searchResult);
             }
             else
             {
-                    var audios = await _context.Audio
-                        .Include(a => a.Category)
-                        .ToListAsync();
+                var audios = await _context.Audio
+                    .Include(a => a.Category)
+                    .ToListAsync();
 
-                    // ViewBag.displayMode = displayMode;
-                    return View(audios);
+                // ViewBag.displayMode = displayMode;
+                return View(audios);
             }
             // var applicationDbContext = _context.Audio.Include(a => a.Category);
             // return View(await applicationDbContext.ToListAsync());
@@ -83,6 +91,7 @@ namespace projekt_webbservice.Controllers.mvc
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name");
             return View();
         }
+
 
         // POST: Audio/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -154,6 +163,12 @@ namespace projekt_webbservice.Controllers.mvc
                 //     // ModelState.AddModelError(string.Empty, "Please select an audio file");
                 //     return View(audio);
                 // }
+
+
+                // Retrieve the current user's email
+                string userEmail = User.Identity.Name;
+                // Assign the current user's email to the UploaderEmail property
+                audio.UploaderUser = userEmail;
 
                 audio.Created = DateTime.Now;
 

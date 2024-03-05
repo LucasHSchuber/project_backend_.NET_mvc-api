@@ -19,6 +19,7 @@ namespace project_webbservice.Models
         public string? ImageName { get; set; }
         public string? ImageNameOriginal { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
+        public string? UploaderUser { get; set; } //the user in admin
 
 
         [NotMapped]

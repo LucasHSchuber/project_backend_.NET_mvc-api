@@ -1,5 +1,33 @@
 /* footer */
 
-.footer .footer-box{
-    margin: 0 auto;
+
+.footer {
+    border-top: 1px solid rgb(111, 111, 111, 0.1);
+    padding: 2em 4em;
+}
+
+.footer-nav .nav-item {
+    list-style-type: none;
+    text-decoration: underline;
+}
+
+.footer-nav {}
+
+.footer-navbar-brand {
+    color: rgb(65, 65, 65)!important;
+    font-weight: 600;
+    font-size: 1.3em;
+    text-decoration: none;
+}
+.footer-logo {
+    width: 30px;
+}
+.footer-hr{
+    color: rgb(106, 106, 106) !important;
+}
+
+@media (max-width: 776px) {
+    .footer-nav {
+        align-items: center !important;
+    }
 }

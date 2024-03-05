@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projekt_webbservice.Data;
+using project_webbservice.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace projekt_webbservice
 {
+    [Authorize]
     public class ApplicationUserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,6 +20,18 @@ namespace projekt_webbservice
         public ApplicationUserController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        // GET : ApplicationUser (created by me)
+        public async Task<IActionResult> UserAudios(string id)
+        {
+            var user = await _context.ApplicationUser.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         // GET: ApplicationUser

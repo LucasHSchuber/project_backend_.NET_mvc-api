@@ -1,8 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using projekt_webbservice.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace projekt_webbservice.Controllers;
+
+namespace projekt_webbservice.Controllers.mvc;
 
 public class HomeController : Controller
 {

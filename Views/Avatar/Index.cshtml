@@ -59,13 +59,13 @@
                     <img class="avatar-img" src="@($"imgupload/{item.AvatarImageName}")" alt="avatar @(item.AvatarId)" />
                 </div>
                 <div>
-                    <p>@item.AvatarId</p>
+                    <p>Avatar Id: @item.AvatarId</p>
                 </div>
-                <div class="mb-4">
+                @* <div class="mb-4">
                     <a asp-action="Edit" asp-route-id="@item.AvatarId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.AvatarId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.AvatarId">Delete</a>
-                </div>
+                </div> *@
             </div>
         }
     </div>
