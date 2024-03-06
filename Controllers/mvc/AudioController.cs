@@ -201,12 +201,14 @@ namespace projekt_webbservice.Controllers.mvc
             return View(audio);
         }
 
+
+
         // POST: Audio/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AudioID,Title,Description,Duration,FilePath,Created,CategoryID,AudioData")] Audio audio)
+        public async Task<IActionResult> Edit(int id, [Bind("AudioID,Title,Description,Duration,ImageFile,AudioFile,Created,CategoryID,AudioData")] Audio audio)
         {
             if (id != audio.AudioID)
             {
@@ -218,35 +220,76 @@ namespace projekt_webbservice.Controllers.mvc
 
                 var existingAudio = await _context.Audio.FindAsync(id);
 
+                if (audio.ImageFile != null)
+                {
+                    // Save the original image
+                    string originalFileName = $"original_{Path.GetFileName(audio.ImageFile.FileName)}";
+                    string originalPath = Path.Combine(wwwRootPath + "/imgupload", originalFileName);
+                    using (var originalFileStream = new FileStream(originalPath, FileMode.Create))
+                    {
+                        await audio.ImageFile.CopyToAsync(originalFileStream);
+                    }
+
+                    // Resize and compress the image
+                    using (var image = SixLabors.ImageSharp.Image.Load(audio.ImageFile.OpenReadStream()))
+                    {
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max, // Choose resize mode
+                            Size = new SixLabors.ImageSharp.Size(800, 600) // Set the maximum dimensions
+                        }));
+
+                        // Save the compressed image
+                        string fileName = $"compressed_{Path.GetFileName(audio.ImageFile.FileName)}";
+                        string path = Path.Combine(wwwRootPath + "/imgupload", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            image.Save(fileStream, new JpegEncoder { Quality = 80 }); // Adjust quality as needed
+                        }
+
+                        // Set the UNcompressed image name
+                        existingAudio.ImageNameOriginal = originalFileName;
+                        // Set the compressed image name
+                        existingAudio.ImageName = fileName;
+                    }
+                }
+
+
+                if (audio.AudioFile != null)
+                {
+                    // Handle audio file upload
+                    string audioFileName = Path.GetFileNameWithoutExtension(audio.AudioFile.FileName);
+                    string audioExtension = Path.GetExtension(audio.AudioFile.FileName);
+                    string uniqueAudioFileName = audioFileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + audioExtension;
+                    string audioPath = Path.Combine(wwwRootPath + "/audioupload", uniqueAudioFileName);
+
+                    existingAudio.FilePath = uniqueAudioFileName;
+
+                    using (var fileStream = new FileStream(audioPath, FileMode.Create))
+                    {
+                        await audio.AudioFile.CopyToAsync(fileStream);
+                    }
+
+                }
+
                 existingAudio.Title = audio.Title;
                 existingAudio.Description = audio.Description;
-                existingAudio.Duration = audio.Duration;
-                existingAudio.FilePath = audio.FilePath;
+                // existingAudio.Duration = audio.Duration;
+                // existingAudio.FilePath = audio.FilePath;
                 // existingAudio.Created = audio.Created;
                 existingAudio.CategoryID = audio.CategoryID;
 
-                try
-                {
-                    // Update entity in database
-                    _context.Update(existingAudio);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AudioExists(audio.AudioID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(existingAudio);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryID"] = new SelectList(_context.Category, "CategoryId", "Name", audio.CategoryID);
             return View(audio);
         }
+
+
 
 
 
