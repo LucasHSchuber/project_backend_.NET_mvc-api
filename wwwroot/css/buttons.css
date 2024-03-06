@@ -9,6 +9,7 @@
     border: 1px solid rgba(0, 0, 0, 0.5);
     /* background-color: rgb(209, 209, 209); */
     transition: 0.2s;
+    height: 2.7em;
 }
 
 .button:hover {
@@ -53,7 +54,7 @@
 }
 
 .link:hover {
-    color: rgb(21, 21, 21) !important;
+    color: rgb(196, 196, 196) !important;
 }
 
 .full-size {
@@ -64,13 +65,8 @@
 
 
 @media (max-width: 771px) {
-
     .button {
-        /* font-size: 1em;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 0.6em 2.6em;
-        border: 1px solid rgb(255, 255, 255, 0); */
-        border: 1px solid rgb(72, 72, 72);
+        font-size: 0.8em;
+        border: 1px solid rgb(197, 197, 197);
     }
 }

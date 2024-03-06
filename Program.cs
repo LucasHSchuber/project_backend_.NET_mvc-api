@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using projekt_webbservice.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// var configuration = builder.Configuration;
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -12,6 +15,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// builder.Services.AddAuthentication().AddFacebook(facebookOptions =>
+// {
+//     facebookOptions.ClientId = configuration["Authentication:Facebook:AppId"];
+//     facebookOptions.ClientSecret = configuration["Authentication:Facebook:AppSecret"];
+
+// });
+
+
 builder.Services.AddControllersWithViews();
 
 

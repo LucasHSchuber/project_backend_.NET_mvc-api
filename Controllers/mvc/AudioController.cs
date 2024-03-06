@@ -222,7 +222,7 @@ namespace projekt_webbservice.Controllers.mvc
                 existingAudio.Description = audio.Description;
                 existingAudio.Duration = audio.Duration;
                 existingAudio.FilePath = audio.FilePath;
-                existingAudio.Created = audio.Created;
+                // existingAudio.Created = audio.Created;
                 existingAudio.CategoryID = audio.CategoryID;
 
                 try

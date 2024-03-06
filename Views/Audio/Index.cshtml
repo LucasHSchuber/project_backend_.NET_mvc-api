@@ -33,7 +33,7 @@
     <form class="mb-4" asp-action="Index" asp-controller="Audio" method="get">
         @* <input type="hidden" id="displayMode" name="displayMode" value="@(ViewBag.displayMode)" /> *@
         <input class="user-searchinput" name="searchstring" placeholder="search" type="search" aria-label="search" />
-        <button type="submit" class="button standard">Search</button>
+        <button type="submit" class="button standard"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
         @if (!string.IsNullOrEmpty(ViewBag.search))
         {
             <text>
@@ -52,7 +52,9 @@
         <button class="button" onclick="toggleView(), toggleIcon()">Toggle view <i id="icon" class="fa-solid fa-table"></i></button>
     </div>
 
-    <table class="table" id="audio-table">
+
+    @* audio table *@
+    <table class="table" id="audio-table" >
         <thead>
             <tr>
                 <th>
@@ -92,10 +94,10 @@
                         @Html.DisplayFor(modelItem => item.Category.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Created)
+                        @(item.Created.Date.ToString("yyyy-MM-dd"))
                     </td>
                     <td>
-                        @item.UploaderUser
+                       @(item.UploaderUser.Length > 15 ? item.UploaderUser.Substring(0,15) + "..." : item.UploaderUser)
                     </td>
                 </tr>
             }
@@ -103,12 +105,13 @@
     </table>
 
 
+    @* audio cards *@
     <div id="audio-cards">
       <div class="row d-flex justify-content-center my-5">
 
         @foreach (var item in Model)
         {
-                <div class="audio-box mt-2 mb-1 mx-1 col-lg-2 col-md-3 "
+                <div class="audio-box mt-2 mb-1 mx-1 col-lg-3 col-md-3 "
                     style="background-image: url('imgupload/@item.ImageName');" onclick="redirectToDetails(@item.AudioID)">
                     <audio class="audio mt-3 mb-1" controls
                         src="audioupload/@Html.DisplayFor(modelItem => item.FilePath)"></audio>

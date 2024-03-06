@@ -29,7 +29,7 @@ body {
 
 /* HOME : Controller */
 
-.index-hero-img{
+.index-hero-img {
   width: 25% !important;
 }
 
@@ -101,12 +101,19 @@ body {
 
 #audio-table {
   display: none;
+  width: 60%;
+  margin: 0 auto;
 }
-
 
 @media (max-width: 1012px) {
   .audio-box {
     min-height: 20em;
+  }
+
+  #audio-table {
+    display: none;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .audio-create-box,
@@ -120,7 +127,8 @@ body {
   .audio-box {
     min-height: 15em;
   }
-  #audio-cards{
+
+  #audio-cards {
     padding: 0 1em !important;
   }
 }

@@ -99,11 +99,11 @@
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <div class="footer-logo-box text-center mt-5 mb-4">
-                            <a class="footer-navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img
-                                    class="footer-logo" src="~/images/pray2.png" alt="logo" />HeadSpace</a>
+                            <a class="footer-navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                @* <img class="footer-logo" src="~/images/pray2.png" alt="logo" /> *@
+                                HeadSpace</a>
                         </div>
-                        <ul
-                            class="d-flex flex-column flex-sm-row footer-nav justify-content-center justify-content-sm-start">
+                        <ul class="d-flex flex-column flex-sm-row footer-nav justify-content-center justify-content-sm-start" style="padding-right: 3em;">
                             <li class="nav-item">
                                 <a class="nav-link text-muted" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
