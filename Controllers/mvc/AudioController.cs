@@ -118,8 +118,8 @@ namespace projekt_webbservice.Controllers.mvc
                     {
                         image.Mutate(x => x.Resize(new ResizeOptions
                         {
-                            Mode = ResizeMode.Max, // Choose resize mode
-                            Size = new SixLabors.ImageSharp.Size(800, 600) // Set the maximum dimensions
+                            Mode = ResizeMode.Max, // resize mode
+                            Size = new SixLabors.ImageSharp.Size(800, 600) //maximum dimensions
                         }));
 
                         // Save the compressed image

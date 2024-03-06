@@ -7,6 +7,9 @@
 # Trash file
 Trash/
 
+#secret file#
+secret.json
+
 # dotenv files
 .env
 
