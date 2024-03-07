@@ -28,11 +28,19 @@ builder.Services.AddAuthentication().AddFacebook(facebookOptions =>
 
 });
 
+// var builder = WebApplication.CreateBuilder(args);
+// builder.Services.AddAuthorization();
+// builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
+
+//Authorization
+// app.MapIdentityApi<IdentityUser>();
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

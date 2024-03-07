@@ -8,11 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using project_webbservice.Models;
 using projekt_webbservice.Data;
 using projekt_webbservice.DTOs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace projekt_webbservice.Controllers.api
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    // [Authorize]
+    
     public class AudioApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

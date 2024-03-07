@@ -98,7 +98,7 @@ namespace projekt_webbservice.Controllers.mvc
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AudioID,Title,Description,Duration,ImageFile,AudioFile,Created,CategoryID,AudioData")] Audio audio)
+        public async Task<IActionResult> Create([Bind("AudioID,Title,Description,Duration,ImageFile,AudioFile,Created,CategoryID,AudioData,VideoData")] Audio audio)
         {
             if (ModelState.IsValid)
             {
@@ -162,6 +162,26 @@ namespace projekt_webbservice.Controllers.mvc
                 // {
                 //     // ModelState.AddModelError(string.Empty, "Please select an audio file");
                 //     return View(audio);
+                // }
+
+
+                // Handle video file upload
+                // if (audio.VideoFile != null)
+                // {
+                //     // Generate a unique filename for the uploaded video file
+                //     string videoFileName = Path.GetFileNameWithoutExtension(audio.VideoFile.FileName);
+                //     string videoExtension = Path.GetExtension(audio.VideoFile.FileName);
+                //     string uniqueVideoFileName = videoFileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssff") + videoExtension;
+
+                //     // Save the video file name to the model
+                //     audio.VideoFileName = uniqueVideoFileName;
+
+                //     // Save the video file to the server if needed
+                //     string videoPath = Path.Combine(wwwRootPath + "/videoupload", uniqueVideoFileName);
+                //     using (var fileStream = new FileStream(videoPath, FileMode.Create))
+                //     {
+                //         await audio.VideoFile.CopyToAsync(fileStream);
+                //     }
                 // }
 
 

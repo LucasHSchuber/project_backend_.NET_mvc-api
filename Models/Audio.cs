@@ -16,22 +16,35 @@ namespace project_webbservice.Models
         [Required]
         public string? Description { get; set; }
         public TimeSpan Duration { get; set; }
-        public string? ImageName { get; set; }
-        public string? ImageNameOriginal { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public string? UploaderUser { get; set; } //the user in admin
 
 
+        // Properties for image file
         [NotMapped]
         // [Required]
         public IFormFile? ImageFile { get; set; } // audio image
-        public string? FilePath { get; set; }
+        public string? ImageName { get; set; } // save image compressed
+        public string? ImageNameOriginal { get; set; } // save original image
 
 
+
+        // Properties for audio file
         [NotMapped]
         // [Required]
         public IFormFile? AudioFile { get; set; } // Property to hold the uploaded audio file
         public byte[]? AudioData { get; set; } // Property to store the binary data of the audio file
+        public string? FilePath { get; set; } // store name
+
+
+
+        // Properties for video file
+        [NotMapped]
+        public IFormFile? VideoFile { get; set; } // Property to hold the uploaded video file
+        public byte[]? VideoData { get; set; } // Property to store the binary data of the video file
+        public string? VideoFileName { get; set; } // Property to store the file name
+
+
 
 
         public int CategoryID { get; set; }
@@ -39,6 +52,7 @@ namespace project_webbservice.Models
         public Category? Category { get; set; }
 
         public int UserId { get; set; }
+
 
         // [ForeignKey("UserId")]
         public ICollection<User>? Users { get; set; }
