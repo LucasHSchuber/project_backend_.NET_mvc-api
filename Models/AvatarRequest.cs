@@ -9,6 +9,6 @@ namespace project_webbservice.Models
     public class AvatarRequest
     {
         public int AvatarId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
     }
 }

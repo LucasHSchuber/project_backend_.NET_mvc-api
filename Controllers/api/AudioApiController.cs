@@ -38,13 +38,13 @@ namespace projekt_webbservice.Controllers.api
                 .Select(a => new AudioDto
                 {
                     AudioID = a.AudioID,
-                    Title = a.Title,
-                    Description = a.Description,
+                    Title = a.Title ?? "",
+                    Description = a.Description ?? "",
                     Duration = a.Duration,
                     Created = a.Created,
-                    ImageName = a.ImageName,
-                    ImageNameOriginal = a.ImageNameOriginal,
-                    FilePath = a.FilePath,
+                    ImageName = a.ImageName ?? "",
+                    ImageNameOriginal = a.ImageNameOriginal ?? "",
+                    FilePath = a.FilePath ?? "",
                     CategoryName = a.Category.Name // Include the Category name
                 })
             .ToListAsync();
@@ -62,12 +62,12 @@ namespace projekt_webbservice.Controllers.api
                 .Select(a => new AudioDto
                 {
                     AudioID = a.AudioID,
-                    Title = a.Title,
-                    Description = a.Description,
+                    Title = a.Title ?? "",
+                    Description = a.Description ?? "",
                     Duration = a.Duration,
                     Created = a.Created,
-                    ImageName = a.ImageName,
-                    FilePath = a.FilePath,
+                    ImageName = a.ImageName ?? "",
+                    FilePath = a.FilePath ?? "",
                     CategoryName = a.Category.Name // Include the Category name
                 })
                 .ToListAsync();
@@ -105,12 +105,12 @@ namespace projekt_webbservice.Controllers.api
                 .Select(a => new AudioDto
                 {
                     AudioID = a.AudioID,
-                    Title = a.Title,
-                    Description = a.Description,
+                    Title = a.Title ?? "",
+                    Description = a.Description ?? "",
                     Duration = a.Duration,
                     Created = a.Created,
-                    ImageName = a.ImageName,
-                    FilePath = a.FilePath,
+                    ImageName = a.ImageName ?? "",
+                    FilePath = a.FilePath ?? "",
                     CategoryName = a.Category.Name // Include the Category name
                 })
                 .ToListAsync();

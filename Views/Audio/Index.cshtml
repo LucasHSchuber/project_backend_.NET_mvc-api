@@ -30,10 +30,12 @@
     <div>
         <h5>Search meditation by title</h5>
     </div>
-    <form class="mb-4" asp-action="Index" asp-controller="Audio" method="get">
+
+    <form class="mb-4 search-box" asp-action="Index" asp-controller="Audio" method="get">
         @* <input type="hidden" id="displayMode" name="displayMode" value="@(ViewBag.displayMode)" /> *@
         <input class="user-searchinput" name="searchstring" placeholder="search" type="search" aria-label="search" />
         <button type="submit" class="button standard"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        
         @if (!string.IsNullOrEmpty(ViewBag.search))
         {
             <text>
@@ -47,14 +49,29 @@
             <text></text>
         }
     </form>
+    
+    <div class="d-flex">
 
-    <div class="my-5">
-        <button class="button" onclick="toggleView(), toggleIcon()">Toggle view <i id="icon" class="fa-solid fa-table"></i></button>
+        <div>
+             <button class="button standard" onclick="toggleView(), toggleIcon()"><i id="icon" class="fa-solid fa-table"></i></button>
+        </div>
+    
+         <form class=" mx-3 filter-box" asp-action="Index" asp-controller="Audio" method="get">
+              @* <label for="category">Filter by Category:</label> *@
+             <select name="category" id="category">
+             <option value="">All Categories</option>
+             @foreach (var category in ViewBag.Categories)
+             {
+                <option value="@category" selected="@(ViewBag.SelectedCategory == category ? "selected" : null)">@category</option>
+             }
+             </select>
+             <button type="submit" class="button standard"><i class="fa-solid fa-filter"></i> </button>
+          </form>
     </div>
 
 
     @* audio table *@
-    <table class="table" id="audio-table" >
+    <table class="table my-5" id="audio-table" >
         <thead>
             <tr>
                 <th>
@@ -88,7 +105,7 @@
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>
                     <td>
-                        @(item.Description.Length > 15 ? item.Description.Substring(0,15) + "..." : item.Description)
+                        @(item.Description?.Length > 15 ? item.Description.Substring(0,15) + "..." : item.Description)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Category.Name)
@@ -97,7 +114,7 @@
                         @(item.Created.Date.ToString("yyyy-MM-dd"))
                     </td>
                     <td>
-                       @(item.UploaderUser.Length > 15 ? item.UploaderUser.Substring(0,15) + "..." : item.UploaderUser)
+                       @(item.UploaderUser?.Length > 15 ? item.UploaderUser.Substring(0,15) + "..." : item.UploaderUser)
                     </td>
                 </tr>
             }
@@ -118,7 +135,7 @@
                     <div class="audio-box-content">
                         <h1 class="title">@item.Title</h1>
                         <a class="category link" asp-action="Details" asp-controller="Category"
-                            asp-route-id="@item.Category.CategoryId"><em>@item.Category.Name</em></a>
+                            asp-route-id="@item.Category?.CategoryId"><em>@item.Category?.Name</em></a>
                         @if (item.Description != null)
                         {
                             <p class="description my-3">@(item.Description.Length > 75 ? item.Description.Substring(0, 75) +
@@ -174,12 +191,12 @@
 
 
 <style>
-    .user-searchinput {
-        width: 30%;
-        border-radius: 3px;
+    select{
         height: 2.5em;
-        padding: 0.5em;
-    }  
+        padding: 0 1em;
+        border: 2px solid rgb(0, 0, 0, 0.7);
+    }
+    
 </style>
 
 </body>

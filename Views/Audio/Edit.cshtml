@@ -39,12 +39,12 @@
                     <span asp-validation-for="CategoryID" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label"></label>
+                    <label asp-for="ImageFile" class="control-label">Uploaded image file:  <em>@Model.ImageName</em></label>
                     <input asp-for="ImageFile" class="form-control" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="AudioFile" class="control-label"></label>
+                    <label asp-for="AudioFile" class="control-label">Uploaded audio file:  <em>@Model.FilePath</em></label>
                     <input asp-for="AudioFile" class="form-control" />
                     <span asp-validation-for="AudioFile" class="text-danger"></span>
                 </div>

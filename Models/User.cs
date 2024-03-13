@@ -14,11 +14,15 @@ namespace project_webbservice.Models
         //properties
         [Key]
         public int UserId { get; set; }
+        [MinLength(4)]
         public string? Username { get; set; }
+        [MinLength(4)]
         public string? Name { get; set; }
+        [EmailAddress]
         public string? Email { get; set; }
         public string? PasswordHash { get; set; }
         public string? Token { get; set; }
+        // public string? TokenJWT { get; set; }
 
         public string? UserInfo { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;

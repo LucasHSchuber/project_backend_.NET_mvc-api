@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/67687c33-0a01-48ad-8adb-e2b1a73d6ecb/resourceGroups/Luha2200/providers/Microsoft.Web/sites/mindspaceadminapp",
+    "appService.deploySubpath": "bin/Release/net8.0/publish"
+}

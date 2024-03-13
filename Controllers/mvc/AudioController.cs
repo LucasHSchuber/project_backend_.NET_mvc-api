@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 
 
+
 namespace projekt_webbservice.Controllers.mvc
 {
 
@@ -39,31 +40,33 @@ namespace projekt_webbservice.Controllers.mvc
 
 
         // GET: Audio
-        public async Task<IActionResult> Index(string searchstring, string displayMode)
+        public async Task<IActionResult> Index(string searchstring, string category)
         {
+            IQueryable<Audio> query = _context.Audio.Include(a => a.Category); 
+
             if (!string.IsNullOrEmpty(searchstring))
             {
-                var searchResult = await _context.Audio
-                    .Include(a => a.Category)
-                    .Where(a => a.Title.ToLower().Contains(searchstring.ToLower()))
-                    .ToListAsync();
-
+                query = query.Where(a => a.Title.ToLower().Contains(searchstring.ToLower()));
                 ViewBag.search = searchstring;
-                // ViewBag.displayMode = displayMode;
-                return View(searchResult);
             }
-            else
-            {
-                var audios = await _context.Audio
-                    .Include(a => a.Category)
-                    .ToListAsync();
 
-                // ViewBag.displayMode = displayMode;
-                return View(audios);
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(a => a.Category.Name.ToLower() == category.ToLower());
+                ViewBag.SelectedCategory = category;
             }
-            // var applicationDbContext = _context.Audio.Include(a => a.Category);
-            // return View(await applicationDbContext.ToListAsync());
+
+            var result = await query.ToListAsync();
+
+            var categories = await _context.Category
+                .Select(c => c.Name)
+                .Distinct()
+                .ToListAsync();
+            ViewBag.Categories = categories;
+
+            return View(result);
         }
+
 
 
         // GET: Audio/Details/5

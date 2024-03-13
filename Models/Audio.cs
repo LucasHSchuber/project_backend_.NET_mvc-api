@@ -12,8 +12,10 @@ namespace project_webbservice.Models
 
         public int AudioID { get; set; }
         [Required]
+        [MinLength(2)]
         public string? Title { get; set; }
         [Required]
+        [MinLength(6)]
         public string? Description { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;

@@ -14,7 +14,7 @@ namespace project_webbservice.Models
         public int AvatarId { get; set; }
         public string? AvatarImageName { get; set; }
         [NotMapped]
-        public IFormFile AvatarImageFile { get; set; }
+        public IFormFile? AvatarImageFile { get; set; }
 
     }
 }

@@ -102,6 +102,16 @@ namespace projekt_webbservice.Controllers.api
             // }
 
             var requestedUser = await _context.User.FindAsync(id);
+            var userid = requestedUser.UserId;
+            //
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring(7);
+            //check token
+            var isValid = ValidateToken(token, userid);
+            if (!isValid)
+            {
+                return Unauthorized();
+            }
 
             if (requestedUser == null)
             {
@@ -181,6 +191,7 @@ namespace projekt_webbservice.Controllers.api
             // return NoContent();
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
+
 
 
 
@@ -420,8 +431,18 @@ namespace projekt_webbservice.Controllers.api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id, [FromQuery] string passwordConfirm)
         {
-            // Hämta användaren från databasen baserat på id
             var user = await _context.User.FindAsync(id);
+            var userid = user.UserId;
+
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring(7);
+            //check token
+            var isValid = ValidateToken(token, userid);
+            if (!isValid)
+            {
+                return Unauthorized();
+            }
+
             if (user == null)
             {
                 return NotFound("No user found");
@@ -448,6 +469,28 @@ namespace projekt_webbservice.Controllers.api
         {
             return _context.User.Any(e => e.UserId == id);
         }
+
+
+
+        //VALIDATE TOKEN METHOD
+        private bool ValidateToken(string token, int userid)
+        {
+            var userToken = _context.User
+                .Where(a => a.UserId == userid)
+                .Select(a => a.Token)
+                .FirstOrDefault();
+
+            if (userToken == token)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
     }
 
 
